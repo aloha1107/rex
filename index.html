@@ -890,11 +890,11 @@ const WALK={
     나무 집 → 어느 때 어느 곳 → 할 일 → 위험 → 해결 → 집으로. 그 순서대로만 묻는다. */
  mth:[
   {lv:1,en:"Before the tree house took them anywhere — where were Jack and Annie?",ko:"나무 집이 데려가기 전에, 잭이랑 애니는 어디 있었어?",hints:W_START},
-  {lv:1,en:"Then the tree house starts spinning! Where did it take them this time?",ko:"그러다 나무 집이 빙글빙글 돌지! 이번엔 어디로 데려갔어?",hints:["They went to...","They landed in...","It was a place with..."]},
+  {lv:1,id:"where",en:"Then the tree house starts spinning! Where did it take them this time?",ko:"그러다 나무 집이 빙글빙글 돌지! 이번엔 어디로 데려갔어?",hints:["They went to...","They landed in...","It was a place with..."]},
   {lv:2,en:"They climb down the ladder. What was the first thing they saw?",ko:"사다리를 타고 내려가지. 제일 먼저 뭘 봤어?",hints:["They saw...","The first thing was...","There was..."]},
   {lv:2,en:"Did they have a job to do? Something to find, or someone to help?",ko:"거기서 할 일이 있었어? 찾아야 할 것이나 도와야 할 사람?",hints:["They had to...","They were looking for...","Morgan wanted them to..."]},
   {lv:3,en:"Who did they meet there? Tell me about them.",ko:"거기서 누구를 만났어? 그 사람 얘기해 줘.",hints:W_WHO},
-  {lv:1,en:"Something goes wrong in every single book. What went wrong in this one?",ko:"매 권마다 꼭 일이 터지잖아. 이번 권엔 무슨 일이 터졌어?",hints:["Suddenly...","They almost...","The scary part was..."]},
+  {lv:1,id:"trouble",en:"Something goes wrong in every single book. What went wrong in this one?",ko:"매 권마다 꼭 일이 터지잖아. 이번 권엔 무슨 일이 터졌어?",hints:["Suddenly...","They almost...","The scary part was..."]},
   {lv:2,en:"How did they get out of it? Was it Jack's idea, or Annie's?",ko:"어떻게 빠져나왔어? 잭의 생각이었어, 애니의 생각이었어?",hints:["Jack...","Annie...","They..."]},
   {lv:1,en:"And how does it end? What did they bring back to the tree house?",ko:"끝은 어떻게 나? 나무 집으로 뭘 가지고 돌아왔어?",hints:W_END}
  ],
@@ -913,7 +913,7 @@ const WALK={
 function walkFor(kind){
   const r=RANK[STAGE]||3;
   return (WALK[kind]||WALK.other).filter(q=>(q.lv||1)<=r)
-    .map(q=>({en:q.en, ko:q.ko, hints:q.hints}));
+    .map(q=>({id:q.id, en:q.en, ko:q.ko, hints:q.hints}));
 }
 
 /* 🌳 매직트리하우스 — 제목 28개. Rex가 아는 건 제목뿐이다(내용은 모른다). */
@@ -927,6 +927,55 @@ const MTH_TITLES={1:"Dinosaurs Before Dark",2:"The Knight at Dawn",3:"Mummies in
  22:"Revolutionary War on Wednesday",23:"Twister on Tuesday",24:"Earthquake in the Early Morning",
  25:"Stage Fright on a Summer Night",26:"Good Morning, Gorillas",27:"Thanksgiving on Thursday",
  28:"High Tide in Hawaii"};
+/* 🎯 권별 겨냥 — 뼈대의 두 자리(where·trouble)만 그 권에 맞게 갈아 끼운다.
+   **확신 수준으로 선을 그었다.** 쓰는 것은 제목이 말해 주는 시대·장소·중심 상황까지다.
+   누가 무엇을 가져왔는지, 장면의 세부, 대사 — 안 적는다(틀리면 도윤이만 헷갈린다).
+   c:'high' = 제목에 그대로 적힌 것 · c:'mid' = 널리 알려졌지만 제목에 없어 한 걸음 미룬 것.
+   틀린 게 나오면 그 권 한 줄만 고치면 된다. 표에 없는 권은 그냥 뼈대로 떨어진다.
+   ⚠️ Emma 앱에도 같은 표가 있다. 한쪽을 고치면 다른 쪽도 같이 본다(말투만 다르고 사실은 같다). */
+const MTH_AIM={
+ 1:{c:'high',place:"the age of the dinosaurs",pk:"공룡이 살던 시대",risk:"dinosaurs that big",rk:"그렇게 큰 공룡"},
+ 2:{c:'high',place:"a castle back in the days of knights",pk:"기사들이 살던 시대의 성",risk:"knights who don't know who you are",rk:"네가 누군지 모르는 기사들"},
+ 3:{c:'high',place:"ancient Egypt, where the mummies are",pk:"미라가 있는 고대 이집트",risk:"a dark tomb",rk:"어두운 무덤"},
+ 4:{c:'high',place:"the time of pirates",pk:"해적들이 설치던 때",risk:"pirates who don't like strangers",rk:"낯선 사람을 반기지 않는 해적들"},
+ 5:{c:'mid',place:"old Japan, in ninja country",pk:"닌자가 있던 옛 일본",risk:"moving at night without being seen",rk:"들키지 않고 밤에 움직이는 일"},
+ 6:{c:'high',place:"the Amazon rain forest",pk:"아마존 열대우림",risk:"a jungle full of things that bite",rk:"무는 것들이 가득한 정글"},
+ 7:{c:'high',place:"the Ice Age",pk:"빙하기",risk:"the cold, and a sabertooth",rk:"추위, 그리고 검치호"},
+ 8:{c:'high',prep:"down onto",place:"the moon",pk:"달",risk:"having no air to breathe",rk:"숨 쉴 공기가 없다는 것"},
+ 9:{c:'high',place:"the ocean, out where the dolphins are",pk:"돌고래가 있는 바다 한가운데",risk:"being deep underwater",rk:"깊은 물속에 있다는 것"},
+ 10:{c:'high',place:"a ghost town out in the Old West",pk:"서부의 유령 마을",risk:"an empty town where something isn't right",rk:"뭔가 이상한 텅 빈 마을"},
+ 11:{c:'high',place:"the grasslands of Africa",pk:"아프리카 초원",risk:"lions that are hungry",rk:"배고픈 사자들"},
+ 12:{c:'high',place:"the frozen Arctic",pk:"꽁꽁 언 북극",risk:"polar bears, and ice you can fall through",rk:"북극곰, 그리고 빠질 수 있는 얼음"},
+ 13:{c:'high',place:"a town sitting right under a volcano",pk:"화산 바로 아래 있는 마을",risk:"a mountain that could go off any minute",rk:"언제 터질지 모르는 산"},
+ 14:{c:'mid',place:"ancient China",pk:"고대 중국",risk:"a ruler nobody dares to cross",rk:"아무도 거스르지 못하는 통치자"},
+ 15:{c:'high',place:"the time of the Vikings",pk:"바이킹의 시대",risk:"the open sea, and people with swords",rk:"망망대해, 그리고 칼을 든 사람들"},
+ 16:{c:'mid',place:"ancient Greece, at the Olympics",pk:"고대 그리스 올림픽",risk:"rules about who's even allowed to be there",rk:"누가 거기 있어도 되는지에 관한 규칙"},
+ 17:{c:'high',prep:"onto",place:"the Titanic",pk:"타이타닉",risk:"a ship that is going down",rk:"가라앉고 있는 배"},
+ 18:{c:'mid',place:"the Great Plains, where the buffalo were",pk:"들소가 살던 대평원",risk:"a buffalo stampede",rk:"들소 떼의 질주"},
+ 19:{c:'mid',place:"a jungle in India",pk:"인도의 정글",risk:"a tiger that knows you're there",rk:"네가 있다는 걸 아는 호랑이"},
+ 20:{c:'mid',place:"the Australian outback",pk:"호주 오지",risk:"heat, and animals you've never met",rk:"더위, 그리고 처음 보는 동물들"},
+ 21:{c:'high',place:"the American Civil War",pk:"미국 남북전쟁",risk:"a war happening all around you",rk:"사방에서 벌어지는 전쟁"},
+ 22:{c:'mid',place:"the American Revolution",pk:"미국 독립전쟁",risk:"a freezing winter camp",rk:"얼어붙은 겨울 야영지"},
+ 23:{c:'high',place:"the prairie, with a twister coming",pk:"토네이도가 다가오는 대평원",risk:"a tornado",rk:"토네이도"},
+ 24:{c:'high',place:"a city hit by an earthquake",pk:"지진이 덮친 도시",risk:"buildings coming down",rk:"무너지는 건물들"},
+ 25:{c:'high',place:"a theater, on the night of a play",pk:"연극이 열리는 밤의 극장",risk:"having to go on stage",rk:"무대에 서야 한다는 것"},
+ 26:{c:'high',place:"the forest where the gorillas live",pk:"고릴라들이 사는 숲",risk:"getting close to wild gorillas",rk:"야생 고릴라에게 가까이 가는 것"},
+ 27:{c:'mid',place:"the first Thanksgiving",pk:"첫 추수감사절",risk:"a hard season with not much food",rk:"먹을 것이 넉넉지 않은 힘든 계절"},
+ 28:{c:'high',place:"Hawaii, out by the water",pk:"바닷가 하와이",risk:"big waves",rk:"큰 파도"}
+};
+// 겨냥한 질문 — Rex 말투 틀에 그 권의 place·risk 만 갈아 끼운다. 답은 열어 둔다(단답으로 안 끝나게).
+function mthAimed(n){
+  const a=MTH_AIM[n]; if(!a) return null;
+  const P=a.prep||"into";
+  return {
+   where:{en:`Whoa — this time it dropped them ${P} ${a.place}! What made them sure that's where they were?`,
+          ko:`우와 — 이번엔 ${a.pk}에 내려놨네! 거기라는 걸 뭘 보고 알았어?`,
+          hints:["They saw...","They could tell because...","Right away there was..."]},
+   trouble:{en:`Okay, but ${a.risk} — that's trouble. What was the scariest moment for Jack and Annie?`,
+            ko:`그런데 ${a.rk}, 그건 큰일이잖아. 잭이랑 애니한테 제일 무서웠던 순간이 언제였어?`,
+            hints:["The scary part was...","Suddenly...","They almost..."]}
+  };
+}
 // 읽은 권들을 가로지르는 되짚기 — 권별 사실이 아니라 '지금까지 읽은 것' 안에서 고르게 한다
 const MTH_BACK=[
  {en:"Out of all the trips so far, which one would you really want to go on?",ko:"지금까지 읽은 여행 중에 진짜로 가 보고 싶은 건 어느 거야?",hints:["I'd want to go to...","Probably the one with...","Definitely..."]},
@@ -1025,7 +1074,8 @@ function stepsFor(mode,book){
   /* 🗣 영어회화 — 도윤이가 직접 말한다. 정해진 답이 없고, 힌트가 늘 붙는다.
      한 주제(3~5문항)로는 10분을 못 버틴다 → 질문이 TALK_WANT 개가 될 때까지 주제를 이어 붙인다.
      새 주제로 넘어갈 때는 걸음을 따로 두지 않고 첫 질문 앞에 한마디를 붙인다(흐름이 끊기지 않게). */
-  const TALK_WANT=10;
+  const TALK_WANT=10;      // 🗣 영어회화 — 질문 수
+  const PARROT_WANT=20;    // 🦜 따라 말하기 — 따라 말할 줄 수 (한 줄이 질문보다 짧아 두 배로 잡는다)
   if(mode==='talk'){
     const sets=talkPool();
     const first=pick(sets.filter(s=>s.topic!==lastTopic).length?sets.filter(s=>s.topic!==lastTopic):sets);
@@ -1053,18 +1103,30 @@ function stepsFor(mode,book){
        ko:"오늘 진짜 많이 말했다, 도윤! 최고였어. 안녕!",last:true,act:'dance'}
     ];
   }
+  /* 🦜 따라 말하기 — 여기도 10분 눈금이다.
+     한 주제(6~10줄)로 끝내 봤더니 도윤이가 "벌써 끝났어? 아쉬워" 했다(09-17).
+     영어회화와 같은 방식으로 주제를 이어 붙인다 — 넘어가는 자리는 lead 한마디로 알린다. */
   if(mode==='parrot'){
     const sets=talkPool();
-    const pool=sets.filter(s=>s.topic!==lastTopic);
-    const set=pick(pool.length?pool:sets); lastTopic=set.topic;
+    const first=pick(sets.filter(s=>s.topic!==lastTopic).length?sets.filter(s=>s.topic!==lastTopic):sets);
+    lastTopic=first.topic;
+    const mk=(set,isFirst)=>set.lines.map((p,k)=>({en:p.en,ko:p.ko,parrot:true,act:p.act,r:p.r,
+      lead: k===0
+        ? (isFirst ? "First, the question. Say it with me!"
+                   : `Okay, new one — ${TOPIC_EN[set.topic]||'something else'}! Say it with me!`)
+        : (p.r==='q' ? pick(["Now ask me this!","Your turn to ask!","Here's the question!"])
+                     : pick(["And here's the answer!","Now answer like this!","This is how you answer!","And you can say..."]))}));
+    let lines=mk(first,true);
+    const rest=sets.filter(s=>s.topic!==first.topic);
+    while(lines.length<PARROT_WANT && rest.length){
+      const nxt=rest.splice(Math.floor(Math.random()*rest.length),1)[0];
+      lines=lines.concat(mk(nxt,false));
+    }
     return [
-      {en:`Hi Doyun! I'm Rex. Today let's practice ${TOPIC_EN[set.topic]||'real talking'}. Say each line after me!`,
-       ko:`안녕 도윤! 나 Rex야. 오늘 주제는 "${set.topic}" — 한 마디씩 따라 말해 봐!`,intro:true,act:'happy'},
-      ...set.lines.map((p,k)=>({en:p.en,ko:p.ko,parrot:true,act:p.act,r:p.r,
-        lead: p.r==='q'
-          ? (k===0?"First, the question. Say it with me!":pick(["Now ask me this!","Your turn to ask!","Here's the question!"]))
-          : pick(["And here's the answer!","Now answer like this!","This is how you answer!","And you can say..."])})),
-      {en:"You said all of them! That was great, Doyun. Bye bye!",ko:"다 말했다! 진짜 잘했어, 도윤. 안녕!",last:true,act:'dance'}
+      {en:`Hi Doyun! I'm Rex. Today we'll practice a few different things — starting with ${TOPIC_EN[first.topic]||'real talking'}. Say each line after me!`,
+       ko:`안녕 도윤! 나 Rex야. 오늘은 여러 가지 연습하자 — "${first.topic}"부터. 한 마디씩 따라 말해 봐!`,intro:true,act:'happy'},
+      ...lines,
+      {en:"You said every single one! That was great, Doyun. Bye bye!",ko:"하나도 안 빼고 다 말했다! 진짜 잘했어, 도윤. 안녕!",last:true,act:'dance'}
     ];
   }
   /* 📖 책 이야기 — 아무것도 등록하지 않아도 시리즈 뼈대로 굴러간다.
@@ -1108,7 +1170,9 @@ function mthSteps(){
   const read=Math.max(1,Math.min(28,MTH_BOOK||1));
   const next=read+1;
   const title=MTH_TITLES[read]||'';
-  const walk=walkFor('mth');
+  // 권별 겨냥이 있으면 뼈대의 그 자리만 갈아 끼운다. 없는 권은 뼈대 그대로 간다.
+  const aim=mthAimed(read);
+  const walk=walkFor('mth').map(q=>(aim&&q.id&&aim[q.id])?{...q,...aim[q.id]}:q);
   const steps=[
     {en:`Hi Doyun! I'm Rex. Magic Tree House number ${read} — "${title}"! I never read it. You tell me!`,
      ko:`안녕 도윤! 나 Rex야. 매직트리하우스 ${read}권 — "${title}"! 난 안 읽어 봤어. 네가 알려 줘!`,intro:true,act:'jump'},
@@ -1419,7 +1483,7 @@ async function startPlay(m,book){
 
 
 /* ================= 🎧 음원 듣기 =================
-   ⚠️ 여기에 드라이브 경로를 다시 적지 말 것 — 공개본에 그대로 실린다.
+   ⚠️ 여기에 드라이브 경로를 적지 말 것. 윗줄은 발행 스크립트가 문구로 찾아 지우니 문구를 바꾸지 말 것.
    공개 사이트에서는 서버가 없으니 버튼 자체가 안 보인다. */
 let AUDIO_OK=false, audioPath='', audioStack=[], AU=null, curTrack='';
 async function checkAudio(){
