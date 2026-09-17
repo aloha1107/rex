@@ -2,21 +2,1130 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>준비 중</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rex · 공룡 영어 친구</title>
 <style>
-  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-       font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;background:#f6f7f9;color:#333}
-  .box{text-align:center;padding:2rem}
-  h1{font-size:1.4rem;margin:0 0 .6rem}
-  p{margin:0;color:#777;font-size:1rem}
+  :root{--bg1:#2b2150;--bg2:#46307a;--cream:#fff8e8;--gold:#ffb938;--lime:#9be36b;--sky:#c6ecff;--ink:#2a2a2a;--soft:rgba(255,248,232,.68)}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:radial-gradient(circle at 20% 10%,#5b3f99,transparent 45%),linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--cream);
+       font-family:"Segoe UI","Malgun Gothic",sans-serif;display:flex;flex-direction:column}
+  .hidden{display:none!important}
+  header{display:flex;align-items:center;gap:10px;padding:14px 20px;font-size:15px;color:var(--soft)}
+  header b{color:var(--cream);font-size:18px}
+  header .sp{flex:1}
+  #stars{font-size:20px;letter-spacing:2px}
+  .live{font-size:12px;font-weight:800;border-radius:999px;padding:4px 12px;background:rgba(155,227,107,.2);color:var(--lime);border:1px solid rgba(155,227,107,.45)}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 20px 20px}
+  .box{width:100%;max-width:760px}
+
+  .start{text-align:center}
+  .start h1{font-size:42px;margin:6px 0 2px}
+  .start p{color:var(--soft);font-size:18px;margin:0 0 22px}
+  .modes{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .mode{font-size:20px;font-weight:800;border:3px solid rgba(255,248,232,.25);background:rgba(255,255,255,.07);color:var(--cream);border-radius:22px;padding:15px 16px;cursor:pointer;font-family:inherit;width:198px}
+  .mode .e{display:block;font-size:46px;margin-bottom:4px}
+  .mode small{display:block;font-size:14px;font-weight:600;color:var(--soft);margin-top:4px}
+  .mode:hover{border-color:var(--gold);background:rgba(255,185,56,.16)}
+
+  .rexrow{display:flex;gap:18px;align-items:center}
+  .avatar{flex:0 0 auto;width:230px}
+  .start .avatar{width:250px;margin:0 auto}
+  .avatar svg{width:100%;height:auto;display:block;overflow:visible}
+  .r-all{transform-box:view-box;transform-origin:110px 220px}
+  .r-tilt{transform-box:view-box;transform-origin:120px 130px;transition:transform .35s ease}
+  .avatar.listen .r-tilt{transform:rotate(-9deg)}
+  .r-eyes{transform-box:view-box;transform-origin:122px 72px}
+  .r-ear,.r-zzz,.r-roar,.r-food,.r-heart{opacity:0;transition:opacity .25s}
+  .avatar.listen .r-ear{opacity:1}
+
+  .bubble{position:relative;flex:1;background:rgba(255,255,255,.1);border-radius:24px;padding:20px 22px}
+  .bubble::before{content:"";position:absolute;left:-12px;top:50%;margin-top:-10px;border:10px solid transparent;border-right:12px solid rgba(255,255,255,.1);border-left:0}
+  .bubble .en{font-size:32px;line-height:1.35;font-weight:800}
+  .bubble .ko{font-size:17px;color:var(--soft);margin-top:8px}
+  .tools{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .sm{font-size:15px;border:0;border-radius:999px;padding:8px 16px;background:rgba(255,248,232,.18);color:var(--cream);cursor:pointer;font-family:inherit}
+  .sm:hover{background:rgba(255,248,232,.3)}
+
+  .choices{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0 248px}
+  .chip{font-size:22px;font-weight:700;border:2px solid rgba(255,248,232,.35);background:transparent;color:var(--cream);border-radius:999px;padding:10px 20px;cursor:pointer;font-family:inherit}
+  .chip:hover{background:rgba(255,248,232,.12)}
+  .chiphint{margin:8px 0 0 248px;font-size:13px;color:var(--soft)}
+  @media (max-width:780px){.rexrow{flex-direction:column}.avatar{width:180px}.bubble::before{display:none}.choices,.chiphint{margin-left:0;justify-content:center;text-align:center}}
+
+  .me{display:flex;justify-content:flex-end;margin-top:14px}
+  .mebubble{max-width:80%;background:var(--sky);color:#0b3a57;border-radius:24px 6px 24px 24px;padding:12px 20px;font-size:24px;font-weight:700}
+  .mebubble.ko{font-size:20px}
+
+  .mic{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:20px}
+  .micbtn{width:124px;height:124px;border-radius:50%;border:0;background:var(--gold);font-size:54px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .micbtn.on{background:#ef5350;animation:pulse 1s infinite}
+  @keyframes pulse{50%{transform:scale(1.07)}}
+  .miclabel{font-size:17px;color:var(--soft);text-align:center}
+  .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .next{font-size:20px;font-weight:800;border:0;border-radius:999px;padding:12px 30px;background:var(--cream);color:var(--ink);cursor:pointer;font-family:inherit}
+  .did{font-size:20px;font-weight:800;border:0;border-radius:999px;padding:12px 30px;background:var(--lime);color:#1d3b10;cursor:pointer;font-family:inherit}
+  .thinking{font-size:16px;color:var(--soft);margin-top:8px}
+
+  .mom{margin-top:18px;text-align:center}
+  .mom summary{cursor:pointer;color:var(--soft);font-size:14px}
+  .mom .in{display:flex;gap:8px;margin-top:10px}
+  .mom input{flex:1;font-size:18px;padding:10px 14px;border-radius:12px;border:0;font-family:inherit}
+  .mom button{font-size:16px;border:0;border-radius:12px;padding:0 18px;background:var(--gold);cursor:pointer;font-family:inherit}
+
+  /* 꾸미기 */
+  .dressrow{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+  .dresspanel{flex:1;min-width:290px}
+  .grp{margin-bottom:16px}
+  .grp h3{font-size:15px;color:var(--soft);margin:0 0 8px;font-weight:700}
+  .swatches{display:flex;gap:9px;flex-wrap:wrap}
+  .sw{width:46px;height:46px;border-radius:14px;border:3px solid transparent;cursor:pointer;padding:0}
+  .sw.on{border-color:var(--cream);box-shadow:0 0 0 3px rgba(255,185,56,.55)}
+  .opts{display:flex;gap:9px;flex-wrap:wrap}
+  .opt{font-size:17px;font-weight:700;border:2px solid rgba(255,248,232,.3);background:transparent;color:var(--cream);border-radius:14px;padding:9px 16px;cursor:pointer;font-family:inherit}
+  .opt.on{background:var(--gold);color:#3a2a00;border-color:var(--gold)}
+
+  /* 내 책 */
+  .bookhead{text-align:center;margin-bottom:14px}
+  .bookhead h2{font-size:30px;margin:4px 0}
+  .bookhead p{color:var(--soft);font-size:15px;margin:0}
+  .booklist{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .bookitem{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:16px;padding:12px 16px}
+  .bookitem .t{flex:1;min-width:0}
+  .bookitem .t b{font-size:20px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bookitem .t small{color:var(--soft);font-size:13px}
+  .icon{font-size:17px;border:0;border-radius:12px;padding:9px 12px;background:rgba(255,248,232,.16);color:var(--cream);cursor:pointer;font-family:inherit}
+  .go{font-size:17px;font-weight:800;border:0;border-radius:999px;padding:10px 20px;background:var(--lime);color:#1d3b10;cursor:pointer;font-family:inherit}
+  .form{background:rgba(0,0,0,.2);border-radius:18px;padding:16px 18px;margin-top:8px}
+  .form label{display:block;font-size:14px;color:var(--soft);margin:10px 0 6px}
+  .form input,.form textarea{width:100%;font-size:18px;padding:11px 14px;border-radius:12px;border:0;font-family:inherit;line-height:1.5}
+  .form textarea{min-height:120px;resize:vertical}
+  .empty{text-align:center;color:var(--soft);font-size:16px;padding:18px;line-height:1.6}
+
+  .wrap{text-align:center}
+  .wrap h2{font-size:34px;margin:4px 0}
+  .praise{background:rgba(255,185,56,.18);border-radius:18px;padding:18px;font-size:22px;line-height:1.6;margin:14px 0}
+  .log{text-align:left;background:rgba(0,0,0,.2);border-radius:16px;padding:12px 18px;font-size:15px;line-height:1.7;max-height:26vh;overflow:auto}
+  .log .n{color:var(--sky)}
+  footer{text-align:center;font-size:12px;color:var(--soft);padding:0 0 10px}
+
+  /* 🎧 음원 듣기 */
+  .lsthead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .crumb{flex:1;min-width:0;font-size:15px;opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lstbox{display:flex;flex-direction:column;gap:8px;max-height:46vh;overflow:auto;padding-right:4px}
+  .lstitem{display:flex;align-items:center;gap:10px;text-align:left;font-size:17px;font-weight:700;
+           border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:inherit;
+           border-radius:14px;padding:12px 14px;cursor:pointer;font-family:inherit;width:100%}
+  .lstitem:hover{border-color:var(--gold)}
+  .lstitem .ic{font-size:22px;flex:0 0 auto}
+  .lstitem .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lstitem .mn{font-size:13px;opacity:.6;flex:0 0 auto}
+  .lstitem.playing{border-color:var(--gold);background:rgba(244,197,66,.18)}
+  .player{background:rgba(0,0,0,.25);border-radius:18px;padding:14px 16px;margin-bottom:14px}
+  .player .ttl{font-size:16px;font-weight:800;margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pbar{width:100%;height:8px;border-radius:999px;background:rgba(255,255,255,.18);cursor:pointer;overflow:hidden}
+  .pbar i{display:block;height:100%;width:0;background:var(--gold)}
+  .ptime{display:flex;justify-content:space-between;font-size:13px;opacity:.7;margin-top:6px}
+  .pctl{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  .pbtn{font-size:18px;border:0;border-radius:999px;padding:10px 16px;background:rgba(255,255,255,.16);
+        color:inherit;cursor:pointer;font-family:inherit;font-weight:700}
+  .pbtn.big{font-size:26px;padding:10px 22px;background:var(--gold);color:#3a2a00}
+  .pbtn.on{background:var(--gold);color:#3a2a00}
 </style>
 </head>
 <body>
-  <div class="box">
-    <h1>🦖 준비 중이에요</h1>
-    <p>곧 다시 열립니다.</p>
-  </div>
+<header>
+  <b>🦖 Rex</b><span id="modetag">도윤이의 공룡 영어 친구</span>
+  <span class="sp"></span>
+  <span class="live hidden" id="livetag">🟢 진짜 대화</span>
+  <span id="stars"></span>
+</header>
+
+<main>
+  <!-- 시작 -->
+  <section id="start" class="box start">
+    <div class="avatar" id="avStart"></div>
+    <h1>Rex랑 놀자!</h1>
+    <p>놀이 하나 골라 봐</p>
+    <div class="modes">
+      <button class="mode" data-mode="parrot"><span class="e">🦜</span>따라 말하기<small>Rex 말을 그대로!</small></button>
+      <button class="mode" data-mode="talk"><span class="e">🗣</span>영어회화<small>내가 직접 · 힌트 있어!</small></button>
+      <button class="mode" data-mode="book"><span class="e">📖</span>책 이야기<small>읽은 책으로 이야기!</small></button>
+    </div>
+    <div class="grp" style="margin-top:22px">
+      <h3 style="text-align:center">Rex가 말하는 수준 — 도윤이가 <b>알아듣는</b> 만큼</h3>
+      <div class="opts" id="opStageStart" style="justify-content:center"></div>
+    </div>
+    <div class="row" style="margin-top:18px">
+      <button class="sm" id="toDress">🎨 Rex 꾸미기</button>
+      <button class="sm" id="toBooks">📚 내 책 넣기</button>
+      <button class="sm hidden" id="listenBtn">🎧 음원 듣기</button>
+    </div>
+  </section>
+
+  <!-- 꾸미기 -->
+  <section id="dress" class="box hidden">
+    <div class="bookhead"><h2>🎨 Rex 꾸미기</h2><p>도윤이 마음대로 바꿔 봐 — 바로 저장돼</p></div>
+    <div class="dressrow">
+      <div class="avatar" id="avDress" style="width:240px"></div>
+      <div class="dresspanel">
+        <div class="grp"><h3>몸 색깔</h3><div class="swatches" id="swBody"></div></div>
+        <div class="grp"><h3>배 색깔</h3><div class="swatches" id="swBelly"></div></div>
+        <div class="grp"><h3>등 가시 색깔</h3><div class="swatches" id="swSpike"></div></div>
+        <div class="grp"><h3>머리에 쓸 것</h3><div class="opts" id="opHat"></div></div>
+        <div class="grp"><h3>안경</h3><div class="opts" id="opGlass"></div></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:20px">
+      <button class="next" id="dressDone">다 됐어! →</button>
+      <button class="sm" id="dressReset">처음 모습으로</button>
+    </div>
+  </section>
+
+  <!-- 내 책 -->
+  <section id="books" class="box hidden">
+    <div class="bookhead">
+      <h2>📚 도윤이 책</h2>
+      <p>책 뒤에 있는 질문을 넣어 두면, Rex가 읽어 주고 같이 이야기해</p>
+    </div>
+
+    <div class="grp" style="text-align:center">
+      <h3>Rex가 말하는 수준 — 도윤이가 <b>알아듣는</b> 만큼</h3>
+      <div class="opts" id="opStage" style="justify-content:center"></div>
+    </div>
+
+    <div class="booklist" id="booklist"></div>
+
+    <details class="form" id="bookform">
+      <summary style="cursor:pointer;font-size:17px;font-weight:700">➕ 새 책 넣기</summary>
+      <label>책 제목</label>
+      <input id="bTitle" placeholder="예: Kipper and the Giant">
+      <label>책 뒤에 있는 질문 (한 줄에 하나씩)</label>
+      <textarea id="bQs" placeholder="책 뒷면·마지막 장에 있는 질문을 그대로 옮겨 적어 주세요.&#10;한 줄에 하나씩.&#10;&#10;도윤이가 직접 보고 쳐도 좋아요 — 그것도 읽기 연습!"></textarea>
+      <div class="row" style="margin-top:14px;justify-content:flex-start">
+        <button class="go" id="bSave">저장</button>
+        <button class="icon" id="bCancel">취소</button>
+      </div>
+    </details>
+
+    <div class="row" style="margin-top:18px">
+      <button class="next" id="booksBack">← 돌아가기</button>
+    </div>
+  </section>
+
+  <!-- 놀이 -->
+  <section id="play" class="box hidden">
+    <div class="rexrow">
+      <div class="avatar" id="avPlay"></div>
+      <div class="bubble">
+        <div class="en" id="en"></div>
+        <div class="ko hidden" id="ko"></div>
+        <div class="tools">
+          <button class="sm" id="again">🔁 다시 듣기</button>
+          <button class="sm" id="slow">🐢 천천히</button>
+          <button class="sm" id="showko">뜻 보기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="choices" id="choices"></div>
+    <div class="chiphint hidden" id="chiphint">누르면 Rex가 읽어 줘 → 따라 말해 봐</div>
+
+    <div class="me hidden" id="me"><div class="mebubble" id="said"></div></div>
+
+    <div class="mic">
+      <button class="micbtn" id="mic" title="영어로 말하기">🎤</button>
+      <div class="miclabel" id="miclabel">눌러서 말해 봐</div>
+      <div class="thinking hidden" id="thinking">🦖 Rex가 생각하는 중…</div>
+      <div class="row">
+        <button class="sm" id="micko">🇰🇷 한국어로</button>
+        <button class="next" id="next">다음 →</button>
+      </div>
+    </div>
+
+    <details class="mom">
+      <summary>손으로 적기 (마이크가 안 될 때)</summary>
+      <div class="in">
+        <input id="typed" placeholder="도윤이가 한 말 (한국어·영어 모두 OK)">
+        <button id="send">보내기</button>
+      </div>
+    </details>
+  </section>
+
+
+  <!-- 🎧 음원 듣기 -->
+  <section id="listen" class="box hidden">
+    <div class="bookhead"><h2>🎧 음원 듣기</h2><p>집에 있는 음원이야 · 듣고 나서 같이 이야기하자</p></div>
+
+    <div class="player hidden" id="player" data-rate="1">
+      <div class="ttl" id="ptitle"></div>
+      <div class="pbar" id="pbar"><i id="pfill"></i></div>
+      <div class="ptime"><span id="pnow">0:00</span><span id="pdur">0:00</span></div>
+      <div class="pctl">
+        <button class="pbtn" id="pback">⏪ 10초</button>
+        <button class="pbtn big" id="pplay">▶</button>
+        <button class="pbtn" id="pfwd">10초 ⏩</button>
+      </div>
+      <div class="pctl">
+        <button class="pbtn prate" data-rate="0.75">0.75×</button>
+        <button class="pbtn prate on" data-rate="1">1×</button>
+        <button class="pbtn prate" data-rate="1.25">1.25×</button>
+      </div>
+    </div>
+
+    <div class="lsthead">
+      <button class="icon" id="lstup" style="visibility:hidden">← 위로</button>
+      <div class="crumb" id="crumb">음원 서재</div>
+    </div>
+    <div class="lstbox" id="lstbox"></div>
+
+    <div class="row" style="margin-top:16px">
+      <button class="next" id="lstTalk">📖 이 책으로 이야기하기</button>
+      <button class="sm" id="lstBack">← 돌아가기</button>
+    </div>
+  </section>
+  <!-- 마무리 -->
+  <section id="end" class="box wrap hidden">
+    <div class="avatar" id="avEnd" style="width:200px;margin:0 auto"></div>
+    <h2>오늘 Rex랑 놀았다!</h2>
+    <div class="praise" id="praise"></div>
+    <div class="log" id="log"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="next" id="copy">📋 나도에게 줄 기록 복사</button>
+      <button class="sm" id="home">다른 놀이 하기</button>
+    </div>
+  </section>
+</main>
+<footer id="voice"></footer>
+
+<script>
+/* ================= 색 도우미 ================= */
+function shade(hex,amt){
+  const n=parseInt(hex.slice(1),16);
+  const c=[(n>>16)&255,(n>>8)&255,n&255].map(v=>Math.max(0,Math.min(255,Math.round(v+amt))));
+  return '#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+/* ================= Rex 모습 ================= */
+const DEFAULT_LOOK={body:'#6cc06a',belly:'#f5eab0',spike:'#ffa23a',hat:'none',glasses:false};
+const BODY_COLORS=['#6cc06a','#5ab6e8','#f2884f','#c98ce8','#f2607f','#6f7ae0','#4fc8b0','#8d8d8d'];
+const BELLY_COLORS=['#f5eab0','#fff3f3','#ffe0b2','#d7f0ff','#e8dcff','#ffd9e6'];
+const SPIKE_COLORS=['#ffa23a','#ff5f7a','#ffe14d','#9be36b','#7ad9ff','#ffffff'];
+const HAT_NAMES={none:'없음',party:'🎉 고깔',cap:'🧢 모자',crown:'👑 왕관'};
+
+let LOOK={...DEFAULT_LOOK};
+try{ const s=localStorage.getItem('rexLook'); if(s) LOOK={...DEFAULT_LOOK,...JSON.parse(s)}; }catch(e){}
+
+function hatSVG(kind,spike){
+  if(kind==='party') return `<g><path d="M104 44 L152 44 L128 -6 Z" fill="${spike}"/><path d="M104 44 L152 44 L140 36 L128 42 L116 36 Z" fill="#fff8e8" opacity=".85"/><circle cx="128" cy="-9" r="7" fill="#fff8e8"/></g>`;
+  if(kind==='cap')   return `<g><path d="M92 44 a36 32 0 0 1 72 0 Z" fill="${spike}"/><path d="M164 44 q26 1 28 11 q-22 5 -28 -3 Z" fill="${shade(spike,-28)}"/><circle cx="128" cy="12" r="5" fill="${shade(spike,-28)}"/></g>`;
+  if(kind==='crown') return `<g><path d="M98 46 L100 10 L116 32 L128 4 L140 32 L156 10 L158 46 Z" fill="#ffcf4d" stroke="#e2a800" stroke-width="2.5" stroke-linejoin="round"/><circle cx="128" cy="30" r="4.5" fill="#ff5f7a"/></g>`;
+  return '';
+}
+
+function rexSVG(L){
+  const body=L.body, head=shade(body,14), limb=shade(body,-14), leg=shade(body,-22),
+        foot=shade(body,-34), nose=shade(body,-52), mouth=shade(body,-58),
+        belly=L.belly, bline=shade(belly,-22), spike=L.spike;
+  const topSpikes = L.hat==='none'
+    ? `<path d="M100 36 L104 14 L118 32 Z"/><path d="M126 32 L136 12 L144 34 Z"/>` : '';
+  const glasses = L.glasses
+    ? `<g fill="none" stroke="#2c2340" stroke-width="3.6" stroke-linecap="round">
+         <circle cx="104" cy="72" r="21"/><circle cx="144" cy="70" r="21"/>
+         <path d="M125 71 L123 71.5"/><path d="M83 69 L68 62"/>
+       </g>` : '';
+  return `
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-label="Rex">
+ <g class="r-all">
+  <g class="r-bob">
+   <path d="M62 170 C30 176 12 196 6 214 C30 206 52 200 74 196 Z" fill="${limb}"/>
+   <rect x="78" y="196" width="30" height="34" rx="12" fill="${leg}"/>
+   <rect x="128" y="196" width="30" height="34" rx="12" fill="${leg}"/>
+   <ellipse cx="93" cy="230" rx="19" ry="7" fill="${foot}"/><ellipse cx="143" cy="230" rx="19" ry="7" fill="${foot}"/>
+   <ellipse cx="118" cy="168" rx="56" ry="46" fill="${body}"/>
+   <ellipse cx="124" cy="176" rx="34" ry="32" fill="${belly}"/>
+   <g stroke="${bline}" stroke-width="2"><path d="M100 164 H148"/><path d="M98 178 H150"/><path d="M102 192 H146"/></g>
+   <path class="r-armL" d="M92 150 q-16 6 -14 20" stroke="${limb}" stroke-width="10" stroke-linecap="round" fill="none"/>
+   <path class="r-armR" d="M152 150 q16 6 14 20" stroke="${limb}" stroke-width="10" stroke-linecap="round" fill="none"/>
+   <g class="r-tilt">
+    <g fill="${spike}">
+     <path d="M66 70 L58 50 L80 60 Z"/><path d="M78 48 L76 26 L96 40 Z"/>${topSpikes}<path d="M60 100 L44 90 L64 84 Z"/>
+    </g>
+    <ellipse cx="124" cy="84" rx="66" ry="52" fill="${head}"/>
+    <ellipse cx="170" cy="100" rx="30" ry="26" fill="${head}"/>
+    <circle cx="186" cy="88" r="2.6" fill="${nose}"/><circle cx="176" cy="86" r="2.6" fill="${nose}"/>
+    <g class="r-eyes">
+     <circle cx="104" cy="72" r="16" fill="#fff"/><circle cx="144" cy="70" r="16" fill="#fff"/>
+     <circle cx="107" cy="75" r="9" fill="#2c2340"/><circle cx="147" cy="73" r="9" fill="#2c2340"/>
+     <circle cx="110" cy="71" r="3.4" fill="#fff"/><circle cx="150" cy="69" r="3.4" fill="#fff"/>
+    </g>
+    ${glasses}
+    <ellipse cx="88" cy="100" rx="11" ry="7" fill="#ff8fa3" opacity=".45"/>
+    <path class="r-smile" d="M120 110 Q150 128 184 112" stroke="${mouth}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <g class="r-open" style="display:none">
+     <ellipse class="r-mouth" cx="152" cy="116" rx="26" ry="8" fill="#6b1f35"/>
+     <ellipse class="r-tongue" cx="152" cy="121" rx="12" ry="3.5" fill="#ff8a9a"/>
+     <g class="r-teeth" fill="#fff"><path d="M134 108 l4 7 l4 -7 z"/><path d="M160 108 l4 7 l4 -7 z"/></g>
+    </g>
+    ${hatSVG(L.hat,spike)}
+    <text class="r-ear" x="30" y="60" font-size="28">👂</text>
+    <text class="r-zzz" x="178" y="40" font-size="30" fill="#c6ecff" font-weight="800">Zzz</text>
+    <text class="r-roar" x="150" y="30" font-size="30" fill="#ffb938" font-weight="900">ROAR!</text>
+    <text class="r-food" x="196" y="126" font-size="30">🍎</text>
+    <text class="r-heart" x="186" y="54" font-size="28">💛</text>
+   </g>
+  </g>
+ </g>
+</svg>`;
+}
+
+const Rex=(()=>{
+  const hosts=[];
+  let talking=false, open=0, target=0, nextChange=0, t0=performance.now(), mouthHold=0, eyesShut=false;
+  const each=fn=>hosts.forEach(fn);
+  const q=(h,c)=>h.querySelector(c);
+  function blink(){
+    if(!eyesShut) each(h=>{const e=q(h,'.r-eyes'); if(e) e.animate([{transform:'scaleY(1)'},{transform:'scaleY(.08)'},{transform:'scaleY(1)'}],{duration:170});});
+    setTimeout(blink,2200+Math.random()*3000);
+  }
+  function frame(now){
+    if(now<mouthHold){} else if(talking){
+      if(now>nextChange){ target=Math.random()<.18?1:4+Math.random()*12; nextChange=now+70+Math.random()*80; }
+    } else target=0;
+    open+=(target-open)*0.45;
+    const bob=talking?Math.sin((now-t0)/150)*1.8:Math.sin((now-t0)/900)*1.4;
+    each(h=>{
+      const sm=q(h,'.r-smile'), op=q(h,'.r-open'), bb=q(h,'.r-bob');
+      if(!sm||!op||!bb) return;
+      const isOpen=open>1.5;
+      sm.style.display=isOpen?'none':'';
+      op.style.display=isOpen?'':'none';
+      if(isOpen){
+        q(h,'.r-mouth').setAttribute('ry',open.toFixed(1));
+        q(h,'.r-tongue').setAttribute('cy',(116+open*0.6).toFixed(1));
+      }
+      bb.setAttribute('transform',`translate(0 ${bob.toFixed(2)})`);
+    });
+    requestAnimationFrame(frame);
+  }
+  function show(cls,ms){ each(h=>{const e=q(h,cls); if(!e)return; e.style.opacity=1; setTimeout(()=>e.style.opacity=0,ms);}); }
+  function anim(frames,opts){ each(h=>{const e=q(h,'.r-all'); if(e) e.animate(frames,opts);}); }
+  function mouth(v,ms){ target=v; mouthHold=performance.now()+ms; }
+  const ACTIONS={
+    jump(){ anim([{transform:'translateY(0)'},{transform:'translateY(-60px)',offset:.25},{transform:'translateY(0)',offset:.5},{transform:'translateY(-40px)',offset:.72},{transform:'translateY(0)'}],{duration:1100,easing:'ease-in-out'}); mouth(10,900); },
+    roar(){ anim([{transform:'scale(1)'},{transform:'scale(1.14) translateX(-4px)',offset:.2},{transform:'scale(1.14) translateX(4px)',offset:.4},{transform:'scale(1.14) translateX(-4px)',offset:.6},{transform:'scale(1)'}],{duration:1200}); mouth(20,1100); show('.r-roar',1300); },
+    dance(){ anim([{transform:'rotate(0)'},{transform:'rotate(-12deg)'},{transform:'rotate(12deg)'},{transform:'rotate(-12deg)'},{transform:'rotate(12deg)'},{transform:'rotate(0)'}],{duration:1400}); show('.r-heart',1400); },
+    spin(){ anim([{transform:'scaleX(1)'},{transform:'scaleX(-1)',offset:.25},{transform:'scaleX(1)',offset:.5},{transform:'scaleX(-1)',offset:.75},{transform:'scaleX(1)'}],{duration:1200}); },
+    stomp(){ anim([{transform:'translate(0,0)'},{transform:'translate(-8px,-14px)',offset:.15},{transform:'translate(-8px,0)',offset:.3},{transform:'translate(8px,-14px)',offset:.5},{transform:'translate(8px,0)',offset:.65},{transform:'translate(0,-10px)',offset:.8},{transform:'translate(0,0)'}],{duration:1300}); },
+    run(){ anim([{transform:'translateX(0)'},{transform:'translateX(-40px)'},{transform:'translateX(40px)'},{transform:'translateX(0)'}],{duration:1000}); },
+    sleep(){ eyesShut=true; each(h=>{const e=q(h,'.r-eyes'); if(e) e.animate([{transform:'scaleY(1)'},{transform:'scaleY(.08)',offset:.1},{transform:'scaleY(.08)',offset:.9},{transform:'scaleY(1)'}],{duration:2600});}); show('.r-zzz',2500); setTimeout(()=>eyesShut=false,2600); },
+    eat(){ show('.r-food',1400); setTimeout(()=>{ let k=0; const iv=setInterval(()=>{ mouth(k%2?2:16,160); if(++k>6) clearInterval(iv); },170); },300); },
+    happy(){ show('.r-heart',1200); anim([{transform:'translateY(0)'},{transform:'translateY(-24px)'},{transform:'translateY(0)'}],{duration:500}); }
+  };
+  return {
+    mount(el){ el.innerHTML=rexSVG(LOOK); hosts.push(el); },
+    repaint(){ each(h=>h.innerHTML=rexSVG(LOOK)); },
+    start(){ requestAnimationFrame(frame); setTimeout(blink,1500); },
+    talk(on){ talking=on; },
+    pulse(){ if(talking){ target=12+Math.random()*4; nextChange=performance.now()+110; } },
+    listen(on){ each(h=>h.classList.toggle('listen',on)); },
+    act(name){ (ACTIONS[name]||ACTIONS.happy)(); }
+  };
+})();
+['avStart','avPlay','avEnd','avDress'].forEach(id=>Rex.mount(document.getElementById(id)));
+Rex.start();
+
+/* ================= 목소리 ================= */
+const PREFS=['Ana Online (Natural)','Ava Online (Natural)','Emma Online (Natural)','Jenny Online (Natural)','Aria Online (Natural)','Natural'];
+/* 이 컴퓨터에 영어 목소리가 없으면 윈도우가 한국어 목소리로 영어를 읽어 발음이 엉망이 된다.
+   엣지 자연 음성은 인터넷에서 몇 초 늦게 도착하므로 기다렸다가 잡는다. (2026-09-16) */
+let VOICE=null, KOVOICE=null, voiceHooked=false, voiceWaiting=null;
+const allVoices=()=>{ try{ return speechSynthesis.getVoices()||[]; }catch(e){ return []; } };
+const enVoices=()=>allVoices().filter(v=>/^en/i.test(v.lang||''));
+function pickVoice(){
+  const vs=enVoices();
+  for(const p of PREFS){ const v=vs.find(x=>(x.name||'').includes(p)); if(v) return v; }
+  return vs.find(v=>/^en-US/i.test(v.lang)) || vs[0] || null;
+}
+function pickKoVoice(){
+  const vs=allVoices().filter(v=>/^ko/i.test(v.lang||''));
+  return vs.find(v=>/Natural/i.test(v.name||'')) || vs[0] || null;
+}
+function rescan(){ VOICE=pickVoice(); KOVOICE=pickKoVoice(); showVoice(); return VOICE; }
+function loadVoice(){
+  if(VOICE){ showVoice(); return Promise.resolve(); }
+  if(voiceWaiting) return voiceWaiting;
+  voiceWaiting=new Promise(res=>{
+    let done=false;
+    const tryPick=()=>{ rescan(); if(VOICE && !done){ done=true; clearInterval(iv); voiceWaiting=null; res(); } };
+    if(!voiceHooked){ voiceHooked=true; try{ speechSynthesis.addEventListener('voiceschanged',()=>rescan()); }catch(e){} }
+    const iv=setInterval(tryPick,250);
+    tryPick();
+    setTimeout(()=>{ if(!done){ done=true; clearInterval(iv); voiceWaiting=null; res(); } },8000);
+  });
+  return voiceWaiting;
+}
+function showVoice(){
+  const f=document.getElementById('voice');
+  if(f) f.textContent = VOICE ? ('목소리: '+VOICE.name+(/Natural/i.test(VOICE.name)?'':' · 자연 음성 아님'))
+    : '🔇 이 컴퓨터에 영어 목소리가 없어요 — 한국어 목소리로 읽으면 발음이 이상해져서 영어는 소리 내지 않아요. (인터넷 확인 · 눌러서 다시 찾기 · 윈도우 영어 음성 설치 필요)';
+}
+function say(text,rate=0.88){
+  return new Promise(res=>{
+    // 목소리가 없거나 막혀도 앱이 멈추면 안 된다 — 늦어도 이 시간이면 그냥 넘어간다.
+    let done=false;
+    const finish=()=>{ if(done) return; done=true; Rex.talk(false); clearTimeout(guard); res(); };
+    const guard=setTimeout(finish, 2000+text.length*90);
+    if(!('speechSynthesis' in window)){ finish(); return; }
+    try{ speechSynthesis.cancel(); }catch(e){}
+    const isKo=/[가-힣]/.test(text);
+    if(!VOICE) VOICE=pickVoice();
+    if(isKo && !KOVOICE) KOVOICE=pickKoVoice();
+    const V2 = isKo ? KOVOICE : VOICE;
+    if(!isKo && !V2){ showVoice(); finish(); return; }   // 영어 목소리가 없으면 읽지 않는다
+    const u=new SpeechSynthesisUtterance(text);
+    if(V2){u.voice=V2;u.lang=V2.lang;} else u.lang = isKo ? 'ko-KR' : 'en-US';
+    u.rate=rate; u.pitch=1.2;
+    u.onstart=()=>Rex.talk(true);
+    u.onboundary=()=>Rex.pulse();
+    u.onend=finish; u.onerror=finish;
+    try{ speechSynthesis.speak(u); }catch(e){ finish(); }
+  });
+}
+
+/* ================= 놀이 재료 =================
+   바뀐 것(2026-09-16): 3~5분 상한을 없앴다. 도윤이가 더 말하고 싶으면 얼마든지 이어간다. */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const YAY=["Wow! You said it!","Awesome!","So cool!","Yes! Great job!","You did it!","High five!"];
+const CELEBRATE=['jump','dance','happy','spin'];
+
+/* 🦜 따라 말하기 — 실제로 쓰는 회화를 주제별로 묶었다.
+   즉 '듣기'가 '말하기'보다 한참 앞서 있다 → Rex가 하는 말은 수준을 낮추지 않는다.
+   한 판은 한 주제로만 간다. 무작위 감탄사 나열이 아니라 대화 한 자락이 되도록. */
+const PARROT_SETS={
+ s13:[
+  {topic:'인사하고 소개하기',lines:[
+   {r:'q',en:"Hello! How are you today?",ko:"안녕! 오늘 어때?"},
+   {r:'a',en:"I'm good, thank you. How about you?",ko:"난 좋아, 고마워. 너는?"},
+   {r:'q',en:"What is your name?",ko:"이름이 뭐야?"},
+   {r:'a',en:"My name is Doyun. Nice to meet you!",ko:"내 이름은 도윤이야. 만나서 반가워!",act:'happy'},
+   {r:'q',en:"How old are you?",ko:"몇 살이야?"},
+   {r:'a',en:"I am eight years old.",ko:"나는 여덟 살이야."}]},
+  {topic:'나에 대해 말하기',lines:[
+   {r:'q',en:"Where do you live?",ko:"어디 살아?"},
+   {r:'a',en:"I live with my family.",ko:"나는 가족이랑 살아."},
+   {r:'q',en:"Do you have any brothers or sisters?",ko:"형제자매 있어?"},
+   {r:'a',en:"Yes, I have one big sister.",ko:"응, 누나가 한 명 있어."},
+   {r:'q',en:"What do you like?",ko:"뭐 좋아해?"},
+   {r:'a',en:"I really like dinosaurs!",ko:"나는 공룡을 정말 좋아해!",act:'roar'}]},
+  {topic:'기분 말하기',lines:[
+   {r:'q',en:"How do you feel today?",ko:"오늘 기분 어때?"},
+   {r:'a',en:"I feel so happy today!",ko:"오늘 정말 기분 좋아!",act:'jump'},
+   {r:'q',en:"Are you tired?",ko:"피곤해?"},
+   {r:'a',en:"Yes, I am really tired.",ko:"응, 나 너무 피곤해.",act:'sleep'},
+   {r:'q',en:"Are you hungry?",ko:"배고파?"},
+   {r:'a',en:"Yes! Can we eat something?",ko:"응! 뭐 좀 먹을까?",act:'eat'}]},
+  {topic:'부탁하고 고맙다고 하기',lines:[
+   {r:'q',en:"Can I have some water, please?",ko:"물 좀 주실래요?"},
+   {r:'a',en:"Sure, here you go.",ko:"그럼, 여기 있어."},
+   {r:'q',en:"Could you help me, please?",ko:"좀 도와주실래요?"},
+   {r:'a',en:"Of course! What do you need?",ko:"당연하지! 뭐가 필요해?"},
+   {r:'q',en:"Thank you so much!",ko:"정말 고마워요!"},
+   {r:'a',en:"You're welcome!",ko:"천만에!",act:'happy'}]},
+  {topic:'친구랑 놀기',lines:[
+   {r:'q',en:"Do you want to play with me?",ko:"나랑 같이 놀래?"},
+   {r:'a',en:"Yes! Let's play outside.",ko:"응! 밖에 나가서 놀자.",act:'run'},
+   {r:'q',en:"Whose turn is it?",ko:"누구 차례야?"},
+   {r:'a',en:"It's my turn now.",ko:"이제 내 차례야."},
+   {r:'q',en:"Was that fun?",ko:"재밌었어?"},
+   {r:'a',en:"Yes! Let's do it again tomorrow.",ko:"응! 내일 또 하자.",act:'dance'}]}],
+
+ s46:[
+  {topic:'오늘 하루 이야기',lines:[
+   {r:'q',en:"What did you do today?",ko:"오늘 뭐 했어?"},
+   {r:'a',en:"I went to school and played outside.",ko:"학교 갔다가 밖에서 놀았어.",act:'run'},
+   {r:'q',en:"What did you have for lunch?",ko:"점심 뭐 먹었어?"},
+   {r:'a',en:"We had rice and soup at twelve o'clock.",ko:"12시에 밥이랑 국 먹었어.",act:'eat'},
+   {r:'q',en:"How was your day?",ko:"오늘 하루 어땠어?"},
+   {r:'a',en:"It was a really good day, thanks for asking.",ko:"진짜 좋은 하루였어, 물어봐 줘서 고마워.",act:'happy'}]},
+  {topic:'좋아하는 것 말하기',lines:[
+   {r:'q',en:"What is your favorite food?",ko:"제일 좋아하는 음식이 뭐야?"},
+   {r:'a',en:"My favorite food is fried chicken.",ko:"내가 제일 좋아하는 음식은 치킨이야.",act:'eat'},
+   {r:'q',en:"What do you like to do after school?",ko:"학교 끝나고 뭐 하는 거 좋아해?"},
+   {r:'a',en:"I really like playing computer games.",ko:"나는 컴퓨터 게임 하는 걸 정말 좋아해."},
+   {r:'q',en:"Do you like spicy food?",ko:"매운 거 좋아해?"},
+   {r:'a',en:"Not really. I don't like it very much.",ko:"별로. 난 그렇게 안 좋아해."}]},
+  {topic:'친구와 이야기하기',lines:[
+   {r:'q',en:"Do you want to come over to my house?",ko:"우리 집에 올래?"},
+   {r:'a',en:"Sure! What time should I come?",ko:"좋아! 몇 시에 갈까?"},
+   {r:'q',en:"Can I borrow your pencil, please?",ko:"연필 좀 빌려줄래?"},
+   {r:'a',en:"Yes, of course. Here you are.",ko:"응, 그럼. 여기 있어."},
+   {r:'q',en:"Sorry, I didn't mean to do that.",ko:"미안, 일부러 그런 거 아니야."},
+   {r:'a',en:"That's okay. Don't worry about it.",ko:"괜찮아. 신경 쓰지 마.",act:'happy'}]},
+  {topic:'모를 때 물어보기',lines:[
+   {r:'q',en:"Could you say that again, please?",ko:"다시 한 번 말해 줄래?"},
+   {r:'a',en:"Sure. I said we should start now.",ko:"그럼. 지금 시작하자고 했어."},
+   {r:'q',en:"How do you say this in English?",ko:"이거 영어로 뭐라고 해?"},
+   {r:'a',en:"I'm not sure, but let's look it up.",ko:"잘 모르겠는데, 같이 찾아보자."},
+   {r:'q',en:"Do you understand?",ko:"이해했어?"},
+   {r:'a',en:"Not really. Could you explain it again?",ko:"잘 모르겠어. 다시 설명해 줄래?"}]},
+  {topic:'생각 말하기',lines:[
+   {r:'q',en:"What do you think about it?",ko:"그거 어떻게 생각해?"},
+   {r:'a',en:"I think that is a really good idea.",ko:"나는 그거 진짜 좋은 생각인 것 같아.",act:'jump'},
+   {r:'q',en:"Was it scary?",ko:"무서웠어?"},
+   {r:'a',en:"It was a little bit scary at first.",ko:"처음엔 좀 무서웠어."},
+   {r:'q',en:"Which part did you like best?",ko:"어느 부분이 제일 좋았어?"},
+   {r:'a',en:"I liked the ending the best.",ko:"나는 마지막 부분이 제일 좋았어."}]}],
+
+ s79:[
+  {topic:'주말 이야기',lines:[
+   {r:'q',en:"What did you do over the weekend?",ko:"주말에 뭐 했어?"},
+   {r:'a',en:"I went to my grandmother's house on Saturday.",ko:"토요일에 할머니 댁에 갔어."},
+   {r:'q',en:"How long did you stay there?",ko:"거기 얼마나 있었어?"},
+   {r:'a',en:"We stayed until Sunday afternoon.",ko:"일요일 오후까지 있었어."},
+   {r:'q',en:"Did you have a good time?",ko:"재밌게 보냈어?"},
+   {r:'a',en:"It was one of the best days I've ever had.",ko:"살면서 제일 좋았던 날 중 하나였어.",act:'happy'}]},
+  {topic:'약속 잡기',lines:[
+   {r:'q',en:"Do you want to come over to my house?",ko:"우리 집에 올래?"},
+   {r:'a',en:"I'd love to, but I'm a little busy right now.",ko:"가고 싶은데 지금 좀 바빠."},
+   {r:'q',en:"How about tomorrow instead?",ko:"그럼 내일은 어때?"},
+   {r:'a',en:"That works for me. Let's meet at three.",ko:"나는 괜찮아. 세 시에 만나자."},
+   {r:'q',en:"Where should we meet?",ko:"어디서 만날까?"},
+   {r:'a',en:"Let's meet in front of the library.",ko:"도서관 앞에서 만나자.",act:'run'}]},
+  {topic:'설명하고 되묻기',lines:[
+   {r:'q',en:"I'm not sure I understand. Could you explain that?",ko:"이해했는지 모르겠어. 설명해 줄래?"},
+   {r:'a',en:"Sure. What I mean is, it was really hard for me.",ko:"그럼. 내 말은, 나한테는 정말 어려웠다는 거야."},
+   {r:'q',en:"Does that make sense to you?",ko:"내 말 이해돼?"},
+   {r:'a',en:"Yes, now I get it. Thanks a lot!",ko:"응, 이제 알겠어. 정말 고마워!",act:'happy'},
+   {r:'q',en:"Could you speak a little slower, please?",ko:"조금만 천천히 말해 줄래?"},
+   {r:'a',en:"Sorry about that. I'll slow down.",ko:"미안해. 천천히 할게."}]},
+  {topic:'의견 나누기',lines:[
+   {r:'q',en:"What do you think we should do next?",ko:"이제 뭘 하면 좋을까?"},
+   {r:'a',en:"I think we should try something different.",ko:"뭔가 다른 걸 해 보는 게 좋을 것 같아."},
+   {r:'q',en:"Do you agree with me?",ko:"내 생각에 동의해?"},
+   {r:'a',en:"I see what you mean, but I don't really agree.",ko:"무슨 말인지는 알겠는데, 난 좀 생각이 달라."},
+   {r:'q',en:"What was the best part for you?",ko:"너는 어디가 제일 좋았어?"},
+   {r:'a',en:"The best part was when they found the key.",ko:"제일 좋았던 건 열쇠를 찾았을 때야."}]},
+  {topic:'읽은 책 이야기',lines:[
+   {r:'q',en:"What have you been reading lately?",ko:"요즘 무슨 책 읽어?"},
+   {r:'a',en:"I've been reading a really good book about a magic key.",ko:"마법 열쇠 나오는 진짜 좋은 책 읽고 있어."},
+   {r:'q',en:"Was it good?",ko:"재밌었어?"},
+   {r:'a',en:"I couldn't stop reading until the very end.",ko:"끝까지 손을 못 놓겠더라."},
+   {r:'q',en:"Would you recommend it?",ko:"추천할 만해?"},
+   {r:'a',en:"Definitely. I think you'd really like it.",ko:"당연하지. 너도 진짜 좋아할 것 같아.",act:'happy'}]}]
+};
+
+/* ================= ORT 단계 ================= */
+const STAGES={
+  s13:{label:'쉽게 (ORT 1~3)',
+    follows:["Why?","Is it fun?","Do you like it?","Tell me one more thing!","Is it big?","Who else?"],
+    generic:[
+      "Who is in your book? Kipper? Biff? Chip? Or Floppy?",
+      "Is your book funny? Yes or no?",
+      "What do you see in the picture?",
+      "Do you like this book?"
+    ]},
+  s46:{label:'보통 (ORT 4~6)',
+    follows:["Why do you think so?","What happened next?","Tell me more!","How did you feel?","And then?","Was it scary?"],
+    generic:[
+      "The magic key glows! Where did they go in your book?",
+      "Who did you like the most in this book? Why?",
+      "What was the best part? Tell me!",
+      "If you had the magic key, where would you go?"
+    ]},
+  s79:{label:'자연스럽게 (ORT 7~9)',
+    follows:["Why do you think that?","What happened after that?","How did that make you feel?","What would you do?","Tell me more about that!","Really? Why?"],
+    generic:[
+      "What is your book about? Tell me a little!",
+      "Who is your favorite person in the book? Why?",
+      "What was the problem in the story? How did they fix it?",
+      "Would you tell a friend to read it? Why?"
+    ]}
+};
+// 이 값은 '읽는 단계'가 아니라 'Rex가 말하는 수준'이다 → 기본을 7~9로 둔다.
+let STAGE = (()=>{ try{ return localStorage.getItem('rexStage')||'s79'; }catch(e){ return 's79'; } })();
+
+/* ================= 내 책 ================= */
+function loadBooks(){ try{ return JSON.parse(localStorage.getItem('rexBooks')||'[]'); }catch(e){ return []; } }
+function saveBooks(b){ try{ localStorage.setItem('rexBooks',JSON.stringify(b)); }catch(e){} }
+let BOOKS=loadBooks();
+
+/* ================= 진짜 대화 (서버가 있을 때) ================= */
+let LIVE=false;
+async function checkLive(){
+  try{
+    const r=await fetch('chat/ping',{cache:'no-store'});
+    if(!r.ok) return false;
+    const j=await r.json();
+    return !!j.ok;
+  }catch(e){ return false; }
+}
+async function liveReply(history){
+  const r=await fetch('chat',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({who:'rex', stage:STAGE, book:(state.bookTitle||''), messages:history})
+  });
+  if(!r.ok) throw new Error('chat failed');
+  const j=await r.json();
+  if(j.error) throw new Error(j.error);
+  return {text:j.text||'', hints:Array.isArray(j.hints)?j.hints:[]};
+}
+const ACT_RE=/^\s*\[(jump|roar|dance|spin|stomp|run|sleep|eat|happy)\]\s*/i;
+
+/* ================= 놀이 만들기 ================= */
+const state={bookTitle:'',qIndex:0};
+
+const TOPIC_EN={
+ '인사하고 소개하기':'saying hello','나에 대해 말하기':'talking about yourself','기분 말하기':'how you feel',
+ '부탁하고 고맙다고 하기':'asking for things','친구랑 놀기':'playing with friends',
+ '오늘 하루 이야기':'your day','좋아하는 것 말하기':'things you like','친구와 이야기하기':'talking with friends',
+ '모를 때 물어보기':'asking when you are stuck','생각 말하기':'saying what you think',
+ '주말 이야기':'your weekend','약속 잡기':'making plans','설명하고 되묻기':'explaining and asking back',
+ '의견 나누기':'sharing your opinion','읽은 책 이야기':'a book you read'
+};
+/* 💡 대답 힌트 — 도윤이는 아직 말하기가 서투르다. 뭘 말하면 좋을지 발판을 준다.
+   누르면 읽어 주고, 그대로 말해도 되고 바꿔 말해도 된다. */
+const FALLBACK_HINTS=["I think...","Because...","Maybe...","I don't know, but..."];
+function showHints(list){
+  const c=$('choices'); c.innerHTML='';
+  const hints=(list&&list.length)?list:FALLBACK_HINTS;
+  hints.slice(0,4).forEach(h=>{
+    const b=document.createElement('button'); b.className='chip'; b.textContent=h;
+    b.onclick=()=>say(h.replace(/\.\.\.|…/g,'').trim(),0.8);
+    c.appendChild(b);
+  });
+  $('chiphint').textContent='💡 이렇게 말해 봐 — 누르면 읽어 줘 (그대로 말해도, 바꿔 말해도 좋아)';
+  $('chiphint').classList.remove('hidden');
+}
+// 짝이 되는 '대답하는 말'에서 첫머리를 떼어 힌트로 쓴다
+function starterOf(line){
+  if(!line) return "I think...";
+  // 문장으로 쪼개서 가장 알맹이 있는 문장을 고른다 ("Oh, definitely." 같은 맞장구는 버린다)
+  const parts=line.split(/(?<=[.!?])\s+/).map(x=>x.trim()).filter(Boolean);
+  let best=parts[0]||line;
+  for(const s of parts) if(s.split(/\s+/).length>best.split(/\s+/).length) best=s;
+  const w=best.split(/\s+/).slice(0,4).join(' ').replace(/[.,!?]+$/,'');
+  return w.charAt(0).toUpperCase()+w.slice(1)+'...';
+}
+function hintsFor(ans){ return [starterOf(ans), "I think...", "I don't know, but..."]; }
+
+let lastTopic='';
+function stepsFor(mode,book){
+  /* 🗣 영어회화 — 도윤이가 직접 말한다. 정해진 답이 없고, 힌트가 늘 붙는다. */
+  if(mode==='talk'){
+    const sets=PARROT_SETS[STAGE]||PARROT_SETS.s46;
+    const pool=sets.filter(s=>s.topic!==lastTopic);
+    const set=pick(pool.length?pool:sets); lastTopic=set.topic;
+    const qs=set.lines.filter(L=>L.r==='q'), as=set.lines.filter(L=>L.r==='a');
+    usedFollows=[];
+    return [
+      {en:`Hi Doyun! I'm Rex. Let's just talk about ${TOPIC_EN[set.topic]||'stuff'}. Say anything you want — I'll help!`,
+       ko:`안녕 도윤! 오늘은 "${set.topic}"로 그냥 이야기하자. 하고 싶은 말 아무거나 해도 돼 — 힌트 줄게!`,intro:true,act:'happy'},
+      ...qs.map((q,k)=>({en:q.en, ko:q.ko, ask:true, hints:hintsFor((as[k]||{}).en||'')})),
+      {en:"You talked so much today, Doyun! That was awesome. Bye bye!",
+       ko:"오늘 진짜 많이 말했다, 도윤! 최고였어. 안녕!",last:true,act:'dance'}
+    ];
+  }
+  if(mode==='parrot'){
+    const sets=PARROT_SETS[STAGE]||PARROT_SETS.s46;
+    const pool=sets.filter(s=>s.topic!==lastTopic);
+    const set=pick(pool.length?pool:sets); lastTopic=set.topic;
+    return [
+      {en:`Hi Doyun! I'm Rex. Today let's practice ${TOPIC_EN[set.topic]||'real talking'}. Say each line after me!`,
+       ko:`안녕 도윤! 나 Rex야. 오늘 주제는 "${set.topic}" — 한 마디씩 따라 말해 봐!`,intro:true,act:'happy'},
+      ...set.lines.map((p,k)=>({en:p.en,ko:p.ko,parrot:true,act:p.act,r:p.r,
+        lead: p.r==='q'
+          ? (k===0?"First, the question. Say it with me!":pick(["Now ask me this!","Your turn to ask!","Here's the question!"]))
+          : pick(["And here's the answer!","Now answer like this!","This is how you answer!","And you can say..."])})),
+      {en:"You said all of them! That was great, Doyun. Bye bye!",ko:"다 말했다! 진짜 잘했어, 도윤. 안녕!",last:true,act:'dance'}
+    ];
+  }
+  /* 📖 책 이야기 — 등록한 책의 질문을 쓰고, 없으면 단계별 기본 질문을 쓴다.
+     ORT 줄거리는 Rex가 지어내지 않는다. 도윤이가 말해 주는 것만 받는다. */
+  const qs = (book && book.qs && book.qs.length) ? book.qs : STAGES[STAGE].generic;
+  const title = book ? book.title : 'your book';
+  const hello = book
+    ? {en:`Hi Doyun! I'm Rex. You read ${book.title}! Let's talk about it!`,
+       ko:`안녕 도윤! 나 Rex야. ${book.title} 읽었구나! 그 얘기 하자!`,intro:true,act:'jump'}
+    : {en:"Hi Doyun! I'm Rex. You read Oxford Reading Tree books. Wow!",
+       ko:"안녕 도윤! 나 Rex야. ORT 읽는다며? 와!",intro:true,act:'jump'};
+  return [
+    hello,
+    ...qs.map((q,k)=>({en:q, ko:book?'책에 있던 질문이야 — 편하게 대답해 봐':'편하게 대답해 봐', ask:true, qno:k+1, hints:null})),
+    {en:"Thank you, Doyun! That was a great talk. Bye bye!",ko:"고마워, 도윤! 진짜 재밌었어. 안녕!",last:true,act:'dance'}
+  ];
+}
+
+/* ================= 오프라인 대화 이어가기 ================= */
+const clean=t=>t.replace(/\s+/g,' ').trim();
+function echoBack(text){
+  const t=clean(text);
+  if(/[가-힣]/.test(t)) return null;
+  let m=t.match(/\b(?:i (?:like|love|think|want|feel)|it (?:was|is)|because|he (?:is|was)|she (?:is|was)|they (?:are|were))\s+(.{2,40})/i);
+  if(m) return m[0].trim().replace(/[.!?]+$/,'');
+  const w=t.split(' ');
+  if(w.length<=8 && w.length>=2) return t.replace(/[.!?]+$/,'');
+  return null;
+}
+// 되묻는 말이 연달아 겹치면 금방 시시해진다 — 최근에 쓴 건 피해서 고른다.
+let usedFollows=[];
+function nextFollow(){
+  const fol=STAGES[STAGE].follows;
+  const fresh=fol.filter(f=>!usedFollows.includes(f));
+  const f=pick(fresh.length?fresh:fol);
+  usedFollows.push(f);
+  if(usedFollows.length>Math.min(4,fol.length-1)) usedFollows.shift();
+  return f;
+}
+function offlineReply(text,turn){
+  const isKo=/[가-힣]/.test(text);
+  if(isKo){
+    return pick(["I see! Good!","Okay! Nice!","Ha ha, I like that!"])+' '+nextFollow();
+  }
+  const e=echoBack(text);
+  const react = e ? pick([`${cap(e)}! Cool!`,`Oh, ${low(e)}! Nice!`,`${cap(e)}! I like that!`,`Wow, ${low(e)}!`]) : pick(YAY);
+  // 계속 이어간다 — 끊지 않는다. 네 번째 대답마다 한 번씩 더 크게 칭찬만 얹는다.
+  const bravo = (turn>=4 && turn%4===0) ? ' Wow, you talked so much!' : '';
+  return react+bravo+' '+nextFollow();
+}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+// 문장 가운데로 넣을 때 첫 글자를 내린다 — 다만 대명사 I 는 그대로 둔다
+const low=s=>/^I('|\s|$)/.test(s)?s:s.charAt(0).toLowerCase()+s.slice(1);
+
+/* ================= 진행 ================= */
+const $=id=>document.getElementById(id);
+let STEPS=[], i=0, mode='parrot', log=[], spoke=0, lastLine='', rec=null, listening=false, t0=0;
+let turn=0, chat=[];
+const MODE_NAME={parrot:'🦜 따라 말하기',talk:'🗣 영어회화',book:'📖 책 이야기'};
+
+function showSec(id){['start','dress','books','play','end','listen'].forEach(s=>$(s).classList.toggle('hidden',s!==id));
+  if(id!=='listen') stopAudio();}
+function stars(){ $('stars').textContent='⭐'.repeat(Math.min(spoke,10)); }
+function busy(on){ $('thinking').classList.toggle('hidden',!on); $('mic').disabled=on; $('send').disabled=on; }
+
+async function rexSays(line,act){
+  lastLine=line; $('en').textContent=line; log.push({who:'Rex',text:line});
+  if(act) Rex.act(act);
+  await say(line);
+}
+
+async function renderStep(){
+  const s=STEPS[i]; turn=0;
+  $('me').classList.add('hidden'); $('ko').classList.add('hidden'); $('showko').textContent='뜻 보기';
+  $('ko').textContent=s.ko||'';
+  const c=$('choices'); c.innerHTML='';
+  const chips=s.parrot?[s.en]:(s.chips||[]);
+  chips.forEach(ch=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=ch; b.onclick=()=>say(ch,0.8); c.appendChild(b); });
+  if(s.ask) showHints(s.hints);            // 🗣 영어회화·📖 책 이야기 — 늘 힌트를 붙인다
+  else $('chiphint').classList.toggle('hidden',!chips.length);
+  if(chips.length && !s.ask) $('chiphint').textContent =
+      s.r==='q' ? '🙋 묻는 말 — 누르면 다시 읽어 줘 → 따라 말해 봐'
+    : s.r==='a' ? '💬 대답하는 말 — 누르면 다시 읽어 줘 → 따라 말해 봐'
+    : '누르면 Rex가 읽어 줘 → 따라 말해 봐';
+  const needVoice=!(s.intro||s.last);
+  $('miclabel').textContent = s.ask ? '눌러서 말해 봐 — 몇 번이든 계속 말해도 돼'
+                             : '눌러서 말해 봐';
+  $('mic').style.visibility = needVoice ? 'visible':'hidden';
+  $('micko').style.visibility = needVoice ? 'visible':'hidden';
+  $('next').textContent = s.last ? '끝내기 🎉' : (s.ask ? '다음 질문 →' : '다음 →');
+  if(s.parrot){ await rexSays(s.lead+' '+s.en, s.act); lastLine=s.en; }
+  else await rexSays(s.en, s.act);
+  if(s.ask && LIVE) chat.push({role:'assistant',content:s.en});
+  if(s.last) setTimeout(finish,1800);
+}
+
+async function answer(text){
+  const s=STEPS[i]; const isKo=/[가-힣]/.test(text);
+  $('said').textContent=text; $('said').classList.toggle('ko',isKo); $('me').classList.remove('hidden');
+  log.push({who:'도윤',text,ko:isKo}); spoke++; stars();
+
+  if(s.parrot){
+    Rex.act(pick(CELEBRATE));
+    await rexSays(isKo ? `In English we say: "${s.en}" Nice try!` : pick(YAY));
+    return;
+  }
+  if(s.ask){
+    turn++;
+    if(LIVE){
+      chat.push({role:'user',content:text});
+      busy(true);
+      try{
+        let res=await liveReply(chat);
+        let out=res.text||'';
+        chat.push({role:'assistant',content:out});
+        let act=null;
+        const m=out.match(ACT_RE);
+        if(m){ act=m[1].toLowerCase(); out=out.replace(ACT_RE,''); }
+        busy(false);
+        await rexSays(out.trim(), act||'happy');
+        showHints(res.hints&&res.hints.length?res.hints:s.hints);
+      }catch(e){
+        busy(false);
+        LIVE=false; $('livetag').classList.add('hidden');
+        Rex.act('happy');
+        await rexSays(offlineReply(text,turn));
+        showHints(s.hints);
+      }
+      return;
+    }
+    Rex.act('happy');
+    await rexSays(offlineReply(text,turn));
+    showHints(s.hints);
+    return;
+  }
+  Rex.act('happy');
+  await rexSays(s.react ? s.react(text) : pick(YAY));
+}
+
+/* ================= 마이크 ================= */
+function listen(lang){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ $('miclabel').textContent='마이크 인식이 안 돼요 — 아래 "손으로 적기"를 써 주세요'; return; }
+  if(listening){ rec&&rec.stop(); return; }
+  speechSynthesis.cancel();
+  rec=new SR(); rec.lang=lang; rec.interimResults=true; rec.maxAlternatives=1;
+  let final='';
+  rec.onresult=e=>{ let t=''; for(const r of e.results) t+=r[0].transcript; final=t; $('said').textContent=t; $('me').classList.remove('hidden'); };
+  rec.onerror=e=>{ if(e.error==='not-allowed') $('miclabel').textContent='마이크를 허용해 주세요'; };
+  rec.onend=()=>{
+    listening=false; Rex.listen(false); $('mic').classList.remove('on');
+    $('miclabel').textContent = STEPS[i]&&STEPS[i].ask ? '눌러서 말해 봐 — 몇 번이든 계속 말해도 돼' : '눌러서 말해 봐';
+    if(final.trim()) answer(final.trim());
+    else { $('me').classList.add('hidden'); Rex.act('happy'); $('miclabel').textContent='소리가 작았나 봐 — 한 번 더 눌러도 되고, 그냥 "다음"도 좋아'; }
+  };
+  rec.start(); listening=true; Rex.listen(true);
+  $('mic').classList.add('on'); $('miclabel').textContent= lang==='ko-KR' ? '한국어로 말해 봐…' : '듣고 있어… 크게 말해 봐!';
+}
+
+/* ================= 마무리 ================= */
+function finish(){
+  speechSynthesis.cancel();
+  const mins=Math.max(1,Math.round((Date.now()-t0)/60000));
+  $('praise').innerHTML = spoke>0
+    ? `오늘 도윤이가 Rex한테 <b>${spoke}번</b> 말했어! 🦖<br>소리 낸 거 하나하나가 다 멋졌어.`
+    : `오늘은 Rex랑 같이 들으면서 놀았어. 🦖<br>귀도 같이 자라고 있어!`;
+  $('log').innerHTML=log.map(l=>`<div class="${l.who==='도윤'?'n':''}"><b>${l.who}</b> ${l.text.replace(/</g,'&lt;')}</div>`).join('');
+  const record={date:new Date().toISOString().slice(0,10),mins,mode:MODE_NAME[mode],book:state.bookTitle,live:LIVE,spoke,log};
+  try{ const all=JSON.parse(localStorage.getItem('rexLogs')||'[]'); all.push(record); localStorage.setItem('rexLogs',JSON.stringify(all)); }catch(e){}
+  window._record=record;
+  showSec('end'); setTimeout(()=>Rex.act('dance'),300);
+}
+function recordText(r){
+  return `[Rex 놀이 기록 ${r.date} · ${r.mins}분 · ${r.mode}${r.book?' · '+r.book:''}${r.live?' · 진짜 대화':''} · 도윤이가 말한 횟수 ${r.spoke}]\n`+
+    r.log.map(l=>`${l.who}: ${l.text}${l.ko?' (한국어)':''}`).join('\n');
+}
+
+/* ================= 꾸미기 화면 ================= */
+function paintLook(){
+  Rex.repaint();
+  try{ localStorage.setItem('rexLook',JSON.stringify(LOOK)); }catch(e){}
+  drawDress();
+}
+function drawDress(){
+  const mk=(host,colors,key)=>{
+    const el=$(host); el.innerHTML='';
+    colors.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='sw'+(LOOK[key]===c?' on':''); b.style.background=c;
+      b.onclick=()=>{ LOOK[key]=c; paintLook(); };
+      el.appendChild(b);
+    });
+  };
+  mk('swBody',BODY_COLORS,'body'); mk('swBelly',BELLY_COLORS,'belly'); mk('swSpike',SPIKE_COLORS,'spike');
+  const h=$('opHat'); h.innerHTML='';
+  Object.keys(HAT_NAMES).forEach(k=>{
+    const b=document.createElement('button');
+    b.className='opt'+(LOOK.hat===k?' on':''); b.textContent=HAT_NAMES[k];
+    b.onclick=()=>{ LOOK.hat=k; paintLook(); };
+    h.appendChild(b);
+  });
+  const g=$('opGlass'); g.innerHTML='';
+  [[false,'없음'],[true,'🤓 안경']].forEach(([v,label])=>{
+    const b=document.createElement('button');
+    b.className='opt'+(LOOK.glasses===v?' on':''); b.textContent=label;
+    b.onclick=()=>{ LOOK.glasses=v; paintLook(); };
+    g.appendChild(b);
+  });
+}
+
+/* ================= 내 책 화면 ================= */
+function drawStage(){
+  ['opStage','opStageStart'].forEach(host=>{
+    const el=$(host); if(!el) return;
+    el.innerHTML='';
+    Object.keys(STAGES).forEach(k=>{
+      const b=document.createElement('button');
+      b.className='opt'+(STAGE===k?' on':''); b.textContent=STAGES[k].label;
+      b.onclick=()=>{ STAGE=k; try{localStorage.setItem('rexStage',k);}catch(e){} drawStage(); };
+      el.appendChild(b);
+    });
+  });
+}
+function drawBooks(){
+  const el=$('booklist'); el.innerHTML='';
+  if(!BOOKS.length){
+    el.innerHTML='<div class="empty">아직 넣은 책이 없어요.<br>아래 <b>＋ 새 책 넣기</b>로 책 제목과 뒤에 있는 질문을 넣어 주세요.<br>안 넣어도 Rex가 단계에 맞는 질문으로 놀아 줍니다.</div>';
+    return;
+  }
+  BOOKS.forEach(bk=>{
+    const d=document.createElement('div'); d.className='bookitem';
+    d.innerHTML=`<div class="t"><b></b><small>질문 ${bk.qs.length}개</small></div>`;
+    d.querySelector('b').textContent=bk.title;
+    const go=document.createElement('button'); go.className='go'; go.textContent='이 책으로 놀기';
+    go.onclick=()=>startPlay('book',bk);
+    const ed=document.createElement('button'); ed.className='icon'; ed.textContent='✏️';
+    ed.onclick=()=>{ $('bookform').open=true; $('bTitle').value=bk.title; $('bQs').value=bk.qs.join('\n'); $('bookform').dataset.edit=bk.id; $('bTitle').focus(); };
+    const rm=document.createElement('button'); rm.className='icon'; rm.textContent='🗑';
+    rm.onclick=()=>{ if(confirm(`"${bk.title}" 지울까요?`)){ BOOKS=BOOKS.filter(x=>x.id!==bk.id); saveBooks(BOOKS); drawBooks(); } };
+    d.appendChild(go); d.appendChild(ed); d.appendChild(rm);
+    el.appendChild(d);
+  });
+}
+
+/* ================= 시작 ================= */
+async function startPlay(m,book){
+  mode=m;
+  await loadVoice();
+  showVoice();
+  state.bookTitle = book ? book.title : '';
+  STEPS=stepsFor(m,book); i=0; log=[]; spoke=0; turn=0; chat=[]; stars(); t0=Date.now();
+  $('modetag').textContent=MODE_NAME[m]+(book?' · '+book.title:'');
+  showSec('play'); renderStep();
+}
+
+
+/* ================= 🎧 음원 듣기 =================
+   공개 사이트에서는 서버가 없으니 버튼 자체가 안 보인다. */
+let AUDIO_OK=false, audioPath='', audioStack=[], AU=null, curTrack='';
+async function checkAudio(){
+  try{ const r=await fetch('audio/ping?who=rex',{cache:'no-store'}); if(!r.ok) return false; const j=await r.json(); return !!j.ok; }
+  catch(e){ return false; }
+}
+function tidyName(n){
+  let t=String(n).replace(/\.mp3$/i,'');
+  t=t.replace(/^[A-Za-z.\s]{4,30}\s-\s/,'');                 // 작가 이름
+  t=t.replace(/\s*-\s*[A-Za-z]+\s*\(Ch\)\s*$/i,'');          // 낭독자 표시
+  t=t.replace(/^BC\s*0*\d+\s*-?\s*/i,'');                    // 시리즈 코드
+  t=t.replace(/_/g,' ').replace(/\s+/g,' ').replace(/^[\s.\-]+|[\s.\-]+$/g,'');
+  return t||String(n);
+}
+// 음원 폴더 이름을 책 제목으로 (A to Z처럼 한 글자면 시리즈 이름을 앞에 붙인다)
+function currentBookTitle(){
+  const parts=audioPath.split('/').filter(Boolean);
+  const last=parts[parts.length-1]||'';
+  let t=tidyName(last);
+  if(t.length<=2 && parts.length>=2){
+    const parent=tidyName(parts[parts.length-2]).replace(/\s*\([^)]*\)\s*/g,' ').trim();
+    const eng=parent.match(/[A-Za-z][A-Za-z0-9 '&.!-]{2,}/);
+    t=((eng?eng[0].trim():parent)+' · '+t).trim();
+  }
+  return t;
+}
+const fmt=s=>{ if(!isFinite(s)) return '0:00'; const m=Math.floor(s/60), x=Math.floor(s%60); return m+':'+String(x).padStart(2,'0'); };
+
+async function openAudio(rel){
+  audioPath=rel||'';
+  const box=$('lstbox'); box.innerHTML='<div class="empty">불러오는 중…</div>';
+  $('crumb').textContent = audioPath ? audioPath.split('/').map(tidyName).join('  ›  ') : '음원 서재';
+  $('lstup').style.visibility = audioPath ? 'visible' : 'hidden';
+  let j;
+  try{ j=await (await fetch('audio/list?who=rex&p='+encodeURIComponent(audioPath),{cache:'no-store'})).json(); }
+  catch(e){ box.innerHTML='<div class="empty">음원을 불러오지 못했어요.</div>'; return; }
+  if(!j.items || !j.items.length){ box.innerHTML='<div class="empty">여기엔 파일이 없어요.</div>'; return; }
+  box.innerHTML='';
+  j.items.forEach(it=>{
+    const b=document.createElement('button'); b.className='lstitem';
+    const mins = it.type==='file' && it.size ? Math.max(1,Math.round(it.size/1000000*1.05))+'분쯤' : '';
+    b.innerHTML='<span class="ic">'+(it.type==='dir'?'📁':'🎵')+'</span><span class="nm"></span><span class="mn">'+mins+'</span>';
+    b.querySelector('.nm').textContent=tidyName(it.name);
+    if(it.type==='file' && it.path===curTrack) b.classList.add('playing');
+    b.onclick=()=> it.type==='dir' ? openAudio(it.path) : playTrack(it.path, tidyName(it.name));
+    box.appendChild(b);
+  });
+}
+
+function playTrack(rel,label){
+  curTrack=rel;
+  $('player').classList.remove('hidden');
+  $('ptitle').textContent=label;
+  if(AU){ AU.pause(); AU.src=''; }
+  AU=new Audio('audio/file?p='+encodeURIComponent(rel));
+  AU.preload='metadata';
+  let saved=0; try{ saved=parseFloat(localStorage.getItem('aupos:'+rel)||'0')||0; }catch(e){}
+  AU.addEventListener('loadedmetadata',()=>{ if(saved>3 && saved<AU.duration-5) AU.currentTime=saved; $('pdur').textContent=fmt(AU.duration); });
+  AU.addEventListener('timeupdate',()=>{
+    $('pnow').textContent=fmt(AU.currentTime);
+    $('pfill').style.width=(AU.duration?(AU.currentTime/AU.duration*100):0)+'%';
+    if(Math.floor(AU.currentTime)%5===0){ try{ localStorage.setItem('aupos:'+rel,String(AU.currentTime)); }catch(e){} }
+  });
+  AU.addEventListener('ended',()=>{ $('pplay').textContent='▶'; try{ localStorage.removeItem('aupos:'+rel); }catch(e){} });
+  AU.playbackRate=parseFloat($('player').dataset.rate||'1');
+  AU.play().then(()=>$('pplay').textContent='⏸').catch(()=>$('pplay').textContent='▶');
+  openAudio(audioPath);
+}
+function audioWire(){
+  $('lstup').onclick=()=>{ const p=audioPath.split('/'); p.pop(); openAudio(p.join('/')); };
+  $('pplay').onclick=()=>{ if(!AU) return; if(AU.paused){ AU.play(); $('pplay').textContent='⏸'; } else { AU.pause(); $('pplay').textContent='▶'; } };
+  $('pback').onclick=()=>{ if(AU) AU.currentTime=Math.max(0,AU.currentTime-10); };
+  $('pfwd').onclick=()=>{ if(AU) AU.currentTime=Math.min(AU.duration||0,AU.currentTime+10); };
+  $('pbar').onclick=e=>{ if(!AU||!AU.duration) return; const r=e.currentTarget.getBoundingClientRect(); AU.currentTime=(e.clientX-r.left)/r.width*AU.duration; };
+  document.querySelectorAll('.prate').forEach(b=>b.onclick=()=>{
+    const v=parseFloat(b.dataset.rate); $('player').dataset.rate=v; if(AU) AU.playbackRate=v;
+    document.querySelectorAll('.prate').forEach(x=>x.classList.toggle('on',x===b));
+  });
+}
+function stopAudio(){ if(AU){ AU.pause(); } }
+/* ================= 버튼 ================= */
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{
+  const m=b.dataset.mode;
+  if(m==='book'){ drawStage(); drawBooks(); showSec('books'); return; }
+  startPlay(m,null);
+});
+$('toDress').onclick=()=>{ drawDress(); showSec('dress'); };
+$('toBooks').onclick=()=>{ drawStage(); drawBooks(); showSec('books'); };
+$('dressDone').onclick=()=>showSec('start');
+$('dressReset').onclick=()=>{ LOOK={...DEFAULT_LOOK}; paintLook(); };
+$('booksBack').onclick=()=>showSec('start');
+$('bCancel').onclick=e=>{ e.preventDefault(); $('bTitle').value=''; $('bQs').value=''; delete $('bookform').dataset.edit; $('bookform').open=false; };
+$('bSave').onclick=()=>{
+  const title=$('bTitle').value.trim();
+  const qs=$('bQs').value.split('\n').map(x=>x.trim()).filter(Boolean);
+  if(!title){ alert('책 제목을 넣어 주세요.'); return; }
+  const id=$('bookform').dataset.edit;
+  if(id){ const bk=BOOKS.find(x=>x.id===id); if(bk){ bk.title=title; bk.qs=qs; } delete $('bookform').dataset.edit; }
+  else BOOKS.push({id:String(Date.now()),title,qs});
+  saveBooks(BOOKS); drawBooks();
+  $('bTitle').value=''; $('bQs').value=''; $('bookform').open=false;
+};
+$('again').onclick=()=>say(lastLine);
+$('slow').onclick=()=>say(lastLine,0.65);
+$('showko').onclick=()=>{const h=$('ko').classList.toggle('hidden'); $('showko').textContent=h?'뜻 보기':'뜻 숨기기';};
+$('mic').onclick=()=>listen('en-US');
+$('micko').onclick=()=>listen('ko-KR');
+$('next').onclick=()=>{ if(rec&&listening) rec.stop(); if(STEPS[i].last){finish();return;} i=Math.min(i+1,STEPS.length-1); renderStep(); };
+$('send').onclick=()=>{const v=$('typed').value.trim(); if(v){$('typed').value=''; answer(v);}};
+$('typed').onkeydown=e=>{ if(e.key==='Enter') $('send').click(); };
+$('copy').onclick=async()=>{ try{ await navigator.clipboard.writeText(recordText(window._record)); $('copy').textContent='✅ 복사했어요 — 나도 창에 붙여 주세요'; }catch(e){ $('copy').textContent='복사 실패 — 화면 기록을 보여 주세요'; } };
+$('home').onclick=()=>{ $('copy').textContent='📋 나도에게 줄 기록 복사'; $('stars').textContent=''; $('modetag').textContent='도윤이의 공룡 영어 친구'; showSec('start'); };
+
+/* 첫 화면 준비 */
+drawStage();
+audioWire();
+$('listenBtn').onclick=()=>{ showSec('listen'); openAudio(''); };
+$('lstBack').onclick=()=>showSec('start');
+$('lstTalk').onclick=()=>{
+  startPlay('book',{id:'audio',title:currentBookTitle()||'this book',qs:[]});
+};
+checkAudio().then(ok=>{ AUDIO_OK=ok; $('listenBtn').classList.toggle('hidden',!ok); });
+
+/* 진짜 대화가 되는지 조용히 확인 */
+checkLive().then(ok=>{ LIVE=ok; $('livetag').classList.toggle('hidden',!ok); });
+
+/* 목소리는 시작 전부터 찾아 둔다 — 엣지 자연 음성이 몇 초 늦게 온다 */
+loadVoice();
+$('voice').style.cursor='pointer';
+$('voice').onclick=()=>{ if(rescan()) say("Hi Doyun! I'm Rex!"); };
+</script>
 </body>
 </html>
