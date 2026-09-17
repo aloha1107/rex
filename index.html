@@ -150,7 +150,7 @@
     <div class="modes">
       <button class="mode" data-mode="parrot"><span class="e">🦜</span>따라 말하기<small>Rex 말을 그대로!</small></button>
       <button class="mode" data-mode="talk"><span class="e">🗣</span>영어회화<small>내가 직접 · 힌트 있어!</small></button>
-      <button class="mode" data-mode="book"><span class="e">📖</span>책 이야기<small>읽은 책으로 이야기!</small></button>
+      <button class="mode" data-mode="book"><span class="e">📖</span>책 이야기<small>읽은 책 내가 알려 주기!</small></button>
     </div>
     <div class="grp" style="margin-top:22px">
       <h3 style="text-align:center">Rex가 말하는 수준 — 도윤이가 <b>알아듣는</b> 만큼</h3>
@@ -158,7 +158,6 @@
     </div>
     <div class="row" style="margin-top:18px">
       <button class="sm" id="toDress">🎨 Rex 꾸미기</button>
-      <button class="sm" id="toBooks">📚 내 책 넣기</button>
       <button class="sm hidden" id="listenBtn">🎧 음원 듣기</button>
     </div>
   </section>
@@ -182,11 +181,29 @@
     </div>
   </section>
 
-  <!-- 내 책 -->
+  <!-- 책 이야기 고르기 -->
   <section id="books" class="box hidden">
     <div class="bookhead">
-      <h2>📚 도윤이 책</h2>
-      <p>책 뒤에 있는 질문을 넣어 두면, Rex가 읽어 주고 같이 이야기해</p>
+      <h2>📖 책 이야기</h2>
+      <p>무슨 책 읽었어? 고르기만 하면 돼 — Rex는 줄거리를 몰라, 도윤이가 알려 주는 거야</p>
+    </div>
+
+    <div class="grp" style="text-align:center">
+      <h3>어떤 책이야?</h3>
+      <div class="opts" id="opKind" style="justify-content:center"></div>
+    </div>
+
+    <div class="grp hidden" id="mthRow" style="text-align:center">
+      <h3>몇 권까지 읽었어?</h3>
+      <div class="row" style="justify-content:center;gap:10px">
+        <input id="mthNo" type="number" min="1" max="28" style="width:96px;font-size:20px;padding:10px 12px;border-radius:12px;border:0;font-family:inherit;text-align:center">
+        <span id="mthTitle" style="color:var(--soft);font-size:15px"></span>
+      </div>
+    </div>
+
+    <div class="grp hidden" id="otherRow" style="text-align:center">
+      <h3>책 제목 (몰라도 괜찮아 — 비워 둬도 돼)</h3>
+      <input id="otherTitle" placeholder="예: Dinosaur Cove" style="max-width:420px;margin:0 auto;display:block;font-size:18px;padding:11px 14px;border-radius:12px;border:0;font-family:inherit;text-align:center">
     </div>
 
     <div class="grp" style="text-align:center">
@@ -194,22 +211,33 @@
       <div class="opts" id="opStage" style="justify-content:center"></div>
     </div>
 
-    <div class="booklist" id="booklist"></div>
+    <div class="row" style="margin-top:6px">
+      <button class="next" id="bookGo">이 책으로 이야기하자! →</button>
+    </div>
 
-    <details class="form" id="bookform">
-      <summary style="cursor:pointer;font-size:17px;font-weight:700">➕ 새 책 넣기</summary>
-      <label>책 제목</label>
-      <input id="bTitle" placeholder="예: Kipper and the Giant">
-      <label>책 뒤에 있는 질문 (한 줄에 하나씩)</label>
-      <textarea id="bQs" placeholder="책 뒷면·마지막 장에 있는 질문을 그대로 옮겨 적어 주세요.&#10;한 줄에 하나씩.&#10;&#10;도윤이가 직접 보고 쳐도 좋아요 — 그것도 읽기 연습!"></textarea>
-      <div class="row" style="margin-top:14px;justify-content:flex-start">
-        <button class="go" id="bSave">저장</button>
-        <button class="icon" id="bCancel">취소</button>
-      </div>
+    <!-- 📚 내 책 넣기 — 곁가지다. 접혀 있고, 안 써도 위에서 고른 것만으로 다 돌아간다. -->
+    <details class="form" id="mybooks" style="margin-top:24px">
+      <summary style="cursor:pointer;font-size:16px;font-weight:700;color:var(--soft)">📚 내 책 넣기 (선택 — 안 넣어도 돼요)</summary>
+      <p style="color:var(--soft);font-size:14px;line-height:1.6;margin:12px 0 0">
+        책 뒤에 있는 질문을 그대로 쓰고 싶을 때만 쓰세요. 넣지 않아도 위에서 고른 책으로 처음부터 끝까지 이야기가 됩니다.</p>
+
+      <div class="booklist" id="booklist"></div>
+
+      <details class="form" id="bookform" style="background:rgba(0,0,0,.18)">
+        <summary style="cursor:pointer;font-size:17px;font-weight:700">➕ 새 책 넣기</summary>
+        <label>책 제목</label>
+        <input id="bTitle" placeholder="예: Dinosaur Cove 1">
+        <label>책 뒤에 있는 질문 (한 줄에 하나씩)</label>
+        <textarea id="bQs" placeholder="책 뒷면·마지막 장에 있는 질문을 그대로 옮겨 적어 주세요.&#10;한 줄에 하나씩.&#10;&#10;도윤이가 직접 보고 쳐도 좋아요 — 그것도 읽기 연습!"></textarea>
+        <div class="row" style="margin-top:14px;justify-content:flex-start">
+          <button class="go" id="bSave">저장</button>
+          <button class="icon" id="bCancel">취소</button>
+        </div>
+      </details>
     </details>
 
     <div class="row" style="margin-top:18px">
-      <button class="next" id="booksBack">← 돌아가기</button>
+      <button class="sm" id="booksBack">← 돌아가기</button>
     </div>
   </section>
 
@@ -504,6 +532,13 @@ const CELEBRATE=['jump','dance','happy','spin'];
    즉 '듣기'가 '말하기'보다 한참 앞서 있다 → Rex가 하는 말은 수준을 낮추지 않는다.
    한 판은 한 주제로만 간다. 무작위 감탄사 나열이 아니라 대화 한 자락이 되도록. */
 const PARROT_SETS={
+ /* ⚠️ s13 은 지금 어디에서도 쓰이지 않는다. 그래도 지우지 마라 — 지우면 발행이 멈춘다.
+    '쉽게' 눈금을 없애면서(도윤이가 문장 난이도를 넘어섰다) 닿지 않는 데이터가 됐고,
+    다섯 주제(인사·나에 대해·기분·부탁·놀기)는 문장을 끌어올려 s46·s79 로 이미 옮겨 놓았다.
+    남겨 두는 진짜 이유: 아래 '나에 대해 말하기'의 "어디 살아?" 짝(사는 곳이 들어간 줄)을
+    공개 발행 스크립트(system\발행\렉스공개.sh)가 **문장을 글자 그대로 찾아** 공개본에서 바꾼다.
+    이 블록을 지우면 찾을 문장이 사라져 공개본에 사는 곳이 그대로 나가거나 발행이 멈춘다.
+    지우거나 옮기려면 먼저 그 스크립트부터 함께 고쳐야 한다. */
  s13:[
   {topic:'인사하고 소개하기',lines:[
    {r:'q',en:"Hello! How are you today?",ko:"안녕! 오늘 어때?"},
@@ -576,7 +611,44 @@ const PARROT_SETS={
    {r:'q',en:"Was it scary?",ko:"무서웠어?"},
    {r:'a',en:"It was a little bit scary at first.",ko:"처음엔 좀 무서웠어."},
    {r:'q',en:"Which part did you like best?",ko:"어느 부분이 제일 좋았어?"},
-   {r:'a',en:"I liked the ending the best.",ko:"나는 마지막 부분이 제일 좋았어."}]}],
+   {r:'a',en:"I liked the ending the best.",ko:"나는 마지막 부분이 제일 좋았어."}]},
+  /* 아래 다섯은 옛 s13 에 있던 주제를 문장만 이 눈금으로 끌어올려 옮겨 온 것.
+     넘어선 건 문장 난이도지 주제가 아니다 — 인사·부탁·놀이는 계속 쓴다. */
+  {topic:'인사하고 소개하기',lines:[
+   {r:'q',en:"Hi! I'm Rex. What's your name?",ko:"안녕! 나는 Rex야. 네 이름은 뭐야?"},
+   {r:'a',en:"I'm Doyun. Nice to meet you!",ko:"나는 도윤이야. 만나서 반가워!",act:'happy'},
+   {r:'q',en:"What grade are you in?",ko:"몇 학년이야?"},
+   {r:'a',en:"I'm in second grade. How about you?",ko:"나는 2학년이야. 너는?"},
+   {r:'q',en:"Do you want to be friends?",ko:"우리 친구 할래?"},
+   {r:'a',en:"Sure! Let's be friends.",ko:"좋아! 우리 친구 하자.",act:'dance'}]},
+  {topic:'나에 대해 말하기',lines:[
+   {r:'q',en:"What are you good at?",ko:"너는 뭘 잘해?"},
+   {r:'a',en:"I'm pretty good at drawing dinosaurs.",ko:"나는 공룡 그리는 걸 꽤 잘해.",act:'roar'},
+   {r:'q',en:"What's your favorite animal?",ko:"제일 좋아하는 동물이 뭐야?"},
+   {r:'a',en:"Dinosaurs, of course! T-rex is the best.",ko:"당연히 공룡이지! 티렉스가 최고야.",act:'stomp'},
+   {r:'q',en:"What do you do when you're bored?",ko:"심심할 땐 뭐 해?"},
+   {r:'a',en:"I usually play games or read a book.",ko:"보통 게임하거나 책 읽어."}]},
+  {topic:'기분 말하기',lines:[
+   {r:'q',en:"How are you feeling today?",ko:"오늘 기분 어때?"},
+   {r:'a',en:"I'm feeling pretty good, actually.",ko:"사실 기분 꽤 좋아.",act:'happy'},
+   {r:'q',en:"You look tired. Are you okay?",ko:"피곤해 보여. 괜찮아?"},
+   {r:'a',en:"I'm just a little sleepy. I stayed up late.",ko:"그냥 좀 졸려. 늦게 잤거든.",act:'sleep'},
+   {r:'q',en:"What makes you happy?",ko:"뭘 하면 기분이 좋아져?"},
+   {r:'a',en:"Playing outside makes me really happy.",ko:"밖에서 노는 게 진짜 좋아.",act:'run'}]},
+  {topic:'부탁하고 고맙다고 하기',lines:[
+   {r:'q',en:"Can you help me with this, please?",ko:"이것 좀 도와줄래?"},
+   {r:'a',en:"Sure, no problem. What do you need?",ko:"응, 괜찮아. 뭐가 필요해?"},
+   {r:'q',en:"Could I borrow that for a minute?",ko:"그거 잠깐 빌려도 될까?"},
+   {r:'a',en:"Go ahead. Just give it back later.",ko:"그럼. 이따 돌려주기만 해."},
+   {r:'q',en:"Thanks a lot! That really helped.",ko:"정말 고마워! 진짜 도움 됐어."},
+   {r:'a',en:"No problem. Anytime!",ko:"뭘. 언제든지!",act:'happy'}]},
+  {topic:'친구랑 놀기',lines:[
+   {r:'q',en:"Do you want to play something?",ko:"뭐 좀 하고 놀래?"},
+   {r:'a',en:"Yeah! What do you want to play?",ko:"좋아! 뭐 하고 놀까?",act:'jump'},
+   {r:'q',en:"Whose turn is it now?",ko:"지금 누구 차례야?"},
+   {r:'a',en:"It's your turn. Go ahead!",ko:"네 차례야. 해 봐!"},
+   {r:'q',en:"That was fun! Do you want to play again?",ko:"재밌었다! 또 할래?"},
+   {r:'a',en:"Yes, but let's take a break first.",ko:"응, 근데 좀 쉬었다 하자.",act:'dance'}]}],
 
  s79:[
   {topic:'주말 이야기',lines:[
@@ -606,50 +678,171 @@ const PARROT_SETS={
    {r:'q',en:"Do you agree with me?",ko:"내 생각에 동의해?"},
    {r:'a',en:"I see what you mean, but I don't really agree.",ko:"무슨 말인지는 알겠는데, 난 좀 생각이 달라."},
    {r:'q',en:"What was the best part for you?",ko:"너는 어디가 제일 좋았어?"},
-   {r:'a',en:"The best part was when they found the key.",ko:"제일 좋았던 건 열쇠를 찾았을 때야."}]},
+   {r:'a',en:"The best part was when they finally figured it out.",ko:"제일 좋았던 건 결국 알아냈을 때야."}]},
   {topic:'읽은 책 이야기',lines:[
    {r:'q',en:"What have you been reading lately?",ko:"요즘 무슨 책 읽어?"},
-   {r:'a',en:"I've been reading a really good book about a magic key.",ko:"마법 열쇠 나오는 진짜 좋은 책 읽고 있어."},
+   {r:'a',en:"I've been reading a really good one. I'm almost done with it.",ko:"진짜 재밌는 거 읽고 있어. 거의 다 읽었어."},
    {r:'q',en:"Was it good?",ko:"재밌었어?"},
    {r:'a',en:"I couldn't stop reading until the very end.",ko:"끝까지 손을 못 놓겠더라."},
    {r:'q',en:"Would you recommend it?",ko:"추천할 만해?"},
-   {r:'a',en:"Definitely. I think you'd really like it.",ko:"당연하지. 너도 진짜 좋아할 것 같아.",act:'happy'}]}]
+   {r:'a',en:"Definitely. I think you'd really like it.",ko:"당연하지. 너도 진짜 좋아할 것 같아.",act:'happy'}]},
+  /* 아래 다섯은 옛 s13 에 있던 주제를 문장만 이 눈금으로 끌어올려 옮겨 온 것.
+     같은 주제라도 여기서는 축약형·얼버무리는 말(kind of, honestly)이 섞인 실제 말투로 쓴다. */
+  {topic:'인사하고 소개하기',lines:[
+   {r:'q',en:"Hey! I don't think we've met. I'm Rex.",ko:"안녕! 우리 처음 보는 것 같은데. 나는 Rex야."},
+   {r:'a',en:"Hi Rex, I'm Doyun. Nice to meet you.",ko:"안녕 Rex, 나는 도윤이야. 만나서 반가워.",act:'happy'},
+   {r:'q',en:"So what do people usually call you?",ko:"사람들은 보통 너를 뭐라고 불러?"},
+   {r:'a',en:"Just Doyun. Nobody really uses my full name.",ko:"그냥 도윤이. 풀네임은 잘 안 불러."},
+   {r:'q',en:"Cool. So what are you into these days?",ko:"좋아. 그래서 요즘 뭐에 빠져 있어?"},
+   {r:'a',en:"Mostly dinosaurs and games, honestly.",ko:"솔직히 거의 공룡이랑 게임이야.",act:'roar'}]},
+  {topic:'나에 대해 말하기',lines:[
+   {r:'q',en:"What's something you're actually good at?",ko:"너 진짜 잘하는 게 뭐야?"},
+   {r:'a',en:"I'd say drawing. I can draw a T-rex from memory.",ko:"그림인 것 같아. 티렉스는 안 보고도 그릴 수 있어.",act:'roar'},
+   {r:'q',en:"Is there anything you're not so good at?",ko:"반대로 잘 못하는 것도 있어?"},
+   {r:'a',en:"Kind of. I'm not great at waiting for my turn.",ko:"좀 있지. 차례 기다리는 건 잘 못해."},
+   {r:'q',en:"If you had a whole free day, what would you do?",ko:"하루가 통째로 비면 뭐 할 거야?"},
+   {r:'a',en:"I'd probably play games all morning and read after that.",ko:"아마 오전 내내 게임하고, 그다음엔 책 읽을 것 같아."}]},
+  {topic:'기분 말하기',lines:[
+   {r:'q',en:"How've you been feeling lately?",ko:"요즘 기분은 어때?"},
+   {r:'a',en:"Pretty good, actually. Nothing's bothering me.",ko:"사실 꽤 좋아. 딱히 신경 쓰이는 것도 없고.",act:'happy'},
+   {r:'q',en:"What do you do when you're upset?",ko:"속상할 땐 어떻게 해?"},
+   {r:'a',en:"I usually just want to be alone for a bit.",ko:"보통은 그냥 좀 혼자 있고 싶어."},
+   {r:'q',en:"Is there anything that always cheers you up?",ko:"기분이 늘 풀리는 게 있어?"},
+   {r:'a',en:"Yeah, running around outside always works.",ko:"응, 밖에서 뛰어놀면 늘 풀려.",act:'run'}]},
+  {topic:'부탁하고 고맙다고 하기',lines:[
+   {r:'q',en:"Hey, would you mind helping me out for a second?",ko:"저기, 잠깐만 도와줄 수 있어?"},
+   {r:'a',en:"Not at all. What's up?",ko:"당연하지. 무슨 일인데?"},
+   {r:'q',en:"Do you think I could borrow this? I'll give it right back.",ko:"이거 좀 빌려도 될까? 바로 돌려줄게."},
+   {r:'a',en:"Go for it. Just don't lose it.",ko:"그럼. 잃어버리지만 마."},
+   {r:'q',en:"Thanks, I really appreciate it.",ko:"고마워, 진짜 고맙다."},
+   {r:'a',en:"Don't mention it. You'd do the same for me.",ko:"별말을. 너도 나한테 그렇게 해 줄 거잖아.",act:'happy'}]},
+  {topic:'친구랑 놀기',lines:[
+   {r:'q',en:"Do you feel like playing something, or are you busy?",ko:"뭐 좀 하고 놀래, 아니면 바빠?"},
+   {r:'a',en:"I'm free! What did you have in mind?",ko:"나 한가해! 뭐 생각해 뒀는데?",act:'jump'},
+   {r:'q',en:"Wait, whose turn was it? I lost track.",ko:"잠깐, 누구 차례였지? 까먹었어."},
+   {r:'a',en:"It was yours, I'm pretty sure.",ko:"네 차례였을걸, 거의 확실해."},
+   {r:'q',en:"That was actually really fun. Same time tomorrow?",ko:"이거 진짜 재밌었다. 내일 또 같은 시간에?"},
+   {r:'a',en:"Definitely. I'm in.",ko:"당연하지. 나 할래.",act:'dance'}]}]
 };
 
-/* ================= ORT 단계 ================= */
+/* ================= Rex가 말하는 수준 (난이도 눈금) =================
+   이건 '무슨 책을 읽는지'와 상관없는 눈금이다 — Rex의 말이 얼마나 길고 어려운가만 정한다.
+   그래서 이름에 특정 시리즈를 붙이지 않는다(붙여 놓으니 '그 책을 넣어야 하나'로 읽혔다).
+   눈금은 두 칸이다. 가장 쉬운 칸(s13)은 도윤이가 이미 넘어서서 없앴다.
+   저장 키(s46/s79)는 예전에 고른 값이 그대로 살아 있도록 바꾸지 않는다. */
 const STAGES={
-  s13:{label:'쉽게 (ORT 1~3)',
-    follows:["Why?","Is it fun?","Do you like it?","Tell me one more thing!","Is it big?","Who else?"],
-    generic:[
-      "Who is in your book? Kipper? Biff? Chip? Or Floppy?",
-      "Is your book funny? Yes or no?",
-      "What do you see in the picture?",
-      "Do you like this book?"
-    ]},
-  s46:{label:'보통 (ORT 4~6)',
-    follows:["Why do you think so?","What happened next?","Tell me more!","How did you feel?","And then?","Was it scary?"],
-    generic:[
-      "The magic key glows! Where did they go in your book?",
-      "Who did you like the most in this book? Why?",
-      "What was the best part? Tell me!",
-      "If you had the magic key, where would you go?"
-    ]},
-  s79:{label:'자연스럽게 (ORT 7~9)',
-    follows:["Why do you think that?","What happened after that?","How did that make you feel?","What would you do?","Tell me more about that!","Really? Why?"],
-    generic:[
-      "What is your book about? Tell me a little!",
-      "Who is your favorite person in the book? Why?",
-      "What was the problem in the story? How did they fix it?",
-      "Would you tell a friend to read it? Why?"
-    ]}
+  s46:{label:'편하게 (짧고 또박또박)',
+    follows:["Why do you think so?","What happened next?","Tell me more!","How did you feel?","And then?","Was it scary?"]},
+  s79:{label:'자연스럽게 (원어민처럼)',
+    follows:["Why do you think that?","What happened after that?","How did that make you feel?","What would you do?","Tell me more about that!","Really? Why?"]}
 };
 // 이 값은 '읽는 단계'가 아니라 'Rex가 말하는 수준'이다 → 기본을 7~9로 둔다.
-let STAGE = (()=>{ try{ return localStorage.getItem('rexStage')||'s79'; }catch(e){ return 's79'; } })();
+// 예전에 저장된 값이 지금 없는 눈금일 수 있다(없앤 s13). 아는 키일 때만 쓰고, 아니면 기본으로 떨어진다.
+let STAGE = (()=>{ try{ const s=localStorage.getItem('rexStage'); return (s&&STAGES[s])?s:'s79'; }catch(e){ return 's79'; } })();
 
-/* ================= 내 책 ================= */
+/* ================= 내 책 (선택 — 안 넣어도 된다) ================= */
 function loadBooks(){ try{ return JSON.parse(localStorage.getItem('rexBooks')||'[]'); }catch(e){ return []; } }
 function saveBooks(b){ try{ localStorage.setItem('rexBooks',JSON.stringify(b)); }catch(e){} }
 let BOOKS=loadBooks();
+
+/* ================= 📖 책 이야기 — 아무것도 넣지 않아도 굴러간다 =================
+   책 뒷면 질문을 한 권씩 손으로 옮겨 적는 방식은 오래 못 간다. 책이 너무 많다.
+   그래서 '권별 질문'이 아니라 '시리즈의 뼈대'를 쓴다 — Emma 앱에서 이미 통한 방식이다.
+   Rex는 줄거리를 하나도 모른다. 순서대로 묻기만 하고, 내용은 도윤이가 채운다.
+   → 지어낼 자리가 없으니 Rex가 틀린 줄거리를 말할 일도 없고, 말은 전부 도윤이가 한다.
+   (근거: 아이가 스스로 이야기를 다시 꺼내 말하는 리텔링이 말하기 양을 늘린다) */
+
+/* 대답 첫머리 힌트 — 어느 책에나 쓴다 */
+const W_START=["At the beginning...","First, ...","It starts when..."];
+const W_THEN =["Then...","After that...","Next, ..."];
+const W_END  =["At the end...","Finally, ...","In the end..."];
+const W_WHO  =["It was...","I think...","I don't remember, but..."];
+const W_FEEL =["It was funny!","It was scary!","It was exciting!"];
+
+/* lv = 어느 눈금에서 묻는가. 2='편하게'부터(=늘) · 3='자연스럽게'에서만.
+   눈금을 낮추면 질문 수가 줄어든다 — 뼈대(처음·무슨 일·끝)는 두 눈금 모두에 남는다. */
+const RANK={s46:2,s79:3};
+const WALK={
+ /* 🔑 ORT — 인물·설정을 Rex가 먼저 꺼내지 않는다. 어느 권이든 이 뼈대로 돈다. */
+ ort:[
+  {lv:1,en:"Who is in your book? Tell me one name!",ko:"책에 누가 나와? 한 명만 말해 봐!",hints:W_WHO},
+  {lv:2,en:"Where were they? At home, at school, or somewhere else?",ko:"어디였어? 집? 학교? 아니면 다른 곳?",hints:["They were at...","In a...","Somewhere..."]},
+  {lv:1,en:"Let's go from the start. What is the first thing that happens?",ko:"처음부터 가 보자. 맨 처음에 무슨 일이 생겨?",hints:W_START},
+  {lv:2,en:"Then something goes wrong, right? What was it?",ko:"그러다 일이 좀 꼬이지? 뭐였어?",hints:W_THEN},
+  {lv:3,en:"How did they fix it? What did they do?",ko:"어떻게 해결했어? 뭘 했어?",hints:["They...","First they...","I think they..."]},
+  {lv:1,en:"And how does it end?",ko:"그래서 어떻게 끝나?",hints:W_END},
+  {lv:2,en:"What was the best part for you?",ko:"너는 어디가 제일 좋았어?",hints:["The best part was...","I liked when...","My favorite was..."]},
+  {lv:3,en:"If you were in that book, what would you do?",ko:"네가 그 책 속에 있다면 뭘 할래?",hints:["I would...","Maybe I would...","I'd probably..."]}
+ ],
+ /* 🌳 매직트리하우스 — 매 권의 뼈대가 똑같다:
+    나무 집 → 어느 때 어느 곳 → 할 일 → 위험 → 해결 → 집으로. 그 순서대로만 묻는다. */
+ mth:[
+  {lv:1,en:"Before the tree house took them anywhere — where were Jack and Annie?",ko:"나무 집이 데려가기 전에, 잭이랑 애니는 어디 있었어?",hints:W_START},
+  {lv:1,en:"Then the tree house starts spinning! Where did it take them this time?",ko:"그러다 나무 집이 빙글빙글 돌지! 이번엔 어디로 데려갔어?",hints:["They went to...","They landed in...","It was a place with..."]},
+  {lv:2,en:"They climb down the ladder. What was the first thing they saw?",ko:"사다리를 타고 내려가지. 제일 먼저 뭘 봤어?",hints:["They saw...","The first thing was...","There was..."]},
+  {lv:2,en:"Did they have a job to do? Something to find, or someone to help?",ko:"거기서 할 일이 있었어? 찾아야 할 것이나 도와야 할 사람?",hints:["They had to...","They were looking for...","Morgan wanted them to..."]},
+  {lv:3,en:"Who did they meet there? Tell me about them.",ko:"거기서 누구를 만났어? 그 사람 얘기해 줘.",hints:W_WHO},
+  {lv:1,en:"Something goes wrong in every single book. What went wrong in this one?",ko:"매 권마다 꼭 일이 터지잖아. 이번 권엔 무슨 일이 터졌어?",hints:["Suddenly...","They almost...","The scary part was..."]},
+  {lv:2,en:"How did they get out of it? Was it Jack's idea, or Annie's?",ko:"어떻게 빠져나왔어? 잭의 생각이었어, 애니의 생각이었어?",hints:["Jack...","Annie...","They..."]},
+  {lv:1,en:"And how does it end? What did they bring back to the tree house?",ko:"끝은 어떻게 나? 나무 집으로 뭘 가지고 돌아왔어?",hints:W_END}
+ ],
+ /* 📖 다른 책 — 제목만 알면(몰라도) 어느 책에나 맞는 뼈대 */
+ other:[
+  {lv:1,en:"Who is in it? Tell me one name!",ko:"누가 나와? 한 명만 말해 봐!",hints:W_WHO},
+  {lv:2,en:"Where does it happen?",ko:"어디에서 일어나는 이야기야?",hints:["It happens in...","At a...","Somewhere..."]},
+  {lv:1,en:"Let's go from the start. What happens first?",ko:"처음부터 가 보자. 먼저 무슨 일이 생겨?",hints:W_START},
+  {lv:2,en:"Was there a problem? What was it?",ko:"무슨 문제가 있었어? 뭐였어?",hints:["The problem was...","Nobody could...","Something..."]},
+  {lv:3,en:"How did they solve it?",ko:"어떻게 풀었어?",hints:["They...","In the end they...","It turned out..."]},
+  {lv:1,en:"And how does it end?",ko:"그래서 어떻게 끝나?",hints:W_END},
+  {lv:2,en:"What was the best part for you?",ko:"너는 어디가 제일 좋았어?",hints:["The best part was...","I liked when...","My favorite was..."]},
+  {lv:3,en:"Would you tell a friend to read it? Why?",ko:"친구한테 읽어 보라고 할 거야? 왜?",hints:["Yes, because...","No, because...","Maybe, if..."]}
+ ]
+};
+function walkFor(kind){
+  const r=RANK[STAGE]||3;
+  return (WALK[kind]||WALK.other).filter(q=>(q.lv||1)<=r)
+    .map(q=>({en:q.en, ko:q.ko, hints:q.hints}));
+}
+
+/* 🌳 매직트리하우스 — 제목 28개. Rex가 아는 건 제목뿐이다(내용은 모른다). */
+const MTH_TITLES={1:"Dinosaurs Before Dark",2:"The Knight at Dawn",3:"Mummies in the Morning",
+ 4:"Pirates Past Noon",5:"Night of the Ninjas",6:"Afternoon on the Amazon",
+ 7:"Sunset of the Sabertooth",8:"Midnight on the Moon",9:"Dolphins at Daybreak",
+ 10:"Ghost Town at Sundown",11:"Lions at Lunchtime",12:"Polar Bears Past Bedtime",
+ 13:"Vacation Under the Volcano",14:"Day of the Dragon King",15:"Viking Ships at Sunrise",
+ 16:"Hour of the Olympics",17:"Tonight on the Titanic",18:"Buffalo Before Breakfast",
+ 19:"Tigers at Twilight",20:"Dingoes at Dinnertime",21:"Civil War on Sunday",
+ 22:"Revolutionary War on Wednesday",23:"Twister on Tuesday",24:"Earthquake in the Early Morning",
+ 25:"Stage Fright on a Summer Night",26:"Good Morning, Gorillas",27:"Thanksgiving on Thursday",
+ 28:"High Tide in Hawaii"};
+// 읽은 권들을 가로지르는 되짚기 — 권별 사실이 아니라 '지금까지 읽은 것' 안에서 고르게 한다
+const MTH_BACK=[
+ {en:"Out of all the trips so far, which one would you really want to go on?",ko:"지금까지 읽은 여행 중에 진짜로 가 보고 싶은 건 어느 거야?",hints:["I'd want to go to...","Probably the one with...","Definitely..."]},
+ {en:"Which book was the scariest so far?",ko:"지금까지 중에 제일 무서웠던 권은 뭐야?",hints:["The scariest was...","I think...","Maybe the one where..."]},
+ {en:"Jack writes everything in his notebook. If you went on a trip, what would you write down?",ko:"잭은 공책에 다 적잖아. 네가 여행을 간다면 뭘 적을 거야?",hints:["I would write...","I'd draw...","Probably..."]},
+ {en:"Annie runs in first and Jack reads about it first. Which one are you more like?",ko:"애니는 먼저 뛰어들고, 잭은 먼저 찾아보잖아. 너는 누구랑 더 닮았어?",hints:["I'm more like...","Honestly, I'm...","It depends, but..."]},
+ {en:"Did any book have a real dinosaur or a real animal you liked?",ko:"공룡이나 동물이 나와서 좋았던 권도 있었어?",hints:["Yes, the one with...","I liked...","Not really, but..."]}
+];
+
+/* 어떤 책으로 이야기할지 — 세 갈래. 아무것도 등록하지 않아도 여기서 바로 논다. */
+const BOOKKINDS={
+  ort:{e:'🔑',name:'ORT',ko:'옥스퍼드 리딩 트리'},
+  mth:{e:'🌳',name:'매직트리하우스',ko:'Magic Tree House'},
+  other:{e:'📖',name:'다른 책',ko:'제목 적기'}
+};
+let BOOKKIND='ort', MTH_BOOK=1, OTHER_TITLE='';
+try{
+  BOOKKIND=localStorage.getItem('rexBookKind')||'ort';
+  MTH_BOOK=parseInt(localStorage.getItem('rexMthBook')||'1',10)||1;
+  OTHER_TITLE=localStorage.getItem('rexOtherTitle')||'';
+}catch(e){}
+if(!BOOKKINDS[BOOKKIND]) BOOKKIND='ort';
+if(!(MTH_BOOK>=1&&MTH_BOOK<=28)) MTH_BOOK=1;
+function seriesBook(){
+  if(BOOKKIND==='mth') return {id:'mth',title:`매직트리하우스 ${MTH_BOOK}권`,qs:[]};
+  if(BOOKKIND==='other') return {id:'other',title:OTHER_TITLE||'',qs:[]};
+  return {id:'ort',title:'ORT',qs:[]};
+}
 
 /* ================= 진짜 대화 (서버가 있을 때) ================= */
 let LIVE=false;
@@ -741,20 +934,66 @@ function stepsFor(mode,book){
       {en:"You said all of them! That was great, Doyun. Bye bye!",ko:"다 말했다! 진짜 잘했어, 도윤. 안녕!",last:true,act:'dance'}
     ];
   }
-  /* 📖 책 이야기 — 등록한 책의 질문을 쓰고, 없으면 단계별 기본 질문을 쓴다.
-     ORT 줄거리는 Rex가 지어내지 않는다. 도윤이가 말해 주는 것만 받는다. */
-  const qs = (book && book.qs && book.qs.length) ? book.qs : STAGES[STAGE].generic;
-  const title = book ? book.title : 'your book';
-  const hello = book
-    ? {en:`Hi Doyun! I'm Rex. You read ${book.title}! Let's talk about it!`,
-       ko:`안녕 도윤! 나 Rex야. ${book.title} 읽었구나! 그 얘기 하자!`,intro:true,act:'jump'}
-    : {en:"Hi Doyun! I'm Rex. You read Oxford Reading Tree books. Wow!",
-       ko:"안녕 도윤! 나 Rex야. ORT 읽는다며? 와!",intro:true,act:'jump'};
+  /* 📖 책 이야기 — 아무것도 등록하지 않아도 시리즈 뼈대로 굴러간다.
+     줄거리는 Rex가 지어내지 않는다. 도윤이가 말해 주는 것만 받는다. */
+  if(book && book.qs && book.qs.length) return registeredSteps(book);   // 예전에 넣어 둔 책 — 그대로 돈다
+  const kind = (book && book.id==='audio') ? 'other' : BOOKKIND;
+  if(kind==='mth') return mthSteps();
+  return walkSteps(kind, (book && book.id==='audio') ? book.title : OTHER_TITLE);
+}
+
+/* 책 뒷면 질문을 손으로 넣어 둔 경우 — 그 질문을 그대로 읽어 준다(예전 방식, 그대로 살려 둔다) */
+function registeredSteps(book){
   return [
-    hello,
-    ...qs.map((q,k)=>({en:q, ko:book?'책에 있던 질문이야 — 편하게 대답해 봐':'편하게 대답해 봐', ask:true, qno:k+1, hints:null})),
+    {en:`Hi Doyun! I'm Rex. You read ${book.title}! I never read it. Tell me!`,
+     ko:`안녕 도윤! 나 Rex야. ${book.title} 읽었구나! 난 안 읽어 봤어. 얘기해 줘!`,intro:true,act:'jump'},
+    ...book.qs.map((q,k)=>({en:q, ko:'책에 있던 질문이야 — 편하게 대답해 봐', ask:true, qno:k+1, hints:null})),
     {en:"Thank you, Doyun! That was a great talk. Bye bye!",ko:"고마워, 도윤! 진짜 재밌었어. 안녕!",last:true,act:'dance'}
   ];
+}
+
+/* 🔑 ORT · 📖 다른 책 — 뼈대 질문으로 처음부터 끝까지 따라간다 */
+function walkSteps(kind,title){
+  const walk=walkFor(kind);
+  const hello = kind==='ort'
+    ? {en:`Hi Doyun! I'm Rex. You read an Oxford Reading Tree book! I can't read, so you tell me. Okay?`,
+       ko:`안녕 도윤! 나 Rex야. ORT 읽었구나! 난 못 읽으니까 네가 알려 줘. 알았지?`,intro:true,act:'jump'}
+    : {en:`Hi Doyun! I'm Rex. You read ${title||'a book'}! I never read it. You tell me everything!`,
+       ko:`안녕 도윤! 나 Rex야. ${title||'책'} 읽었구나! 난 안 읽어 봤어. 네가 다 알려 줘!`,intro:true,act:'jump'};
+  return [
+    hello,
+    {en:"First, one quick thing — was it funny, scary, or exciting?",ko:"먼저 하나만 — 웃겼어, 무서웠어, 신났어?",ask:true,hints:W_FEEL},
+    ...walk.map((q,k)=>({en:q.en, ko:`📖 ${k+1}/${walk.length} · ${q.ko}`, ask:true, qno:k+1, hints:q.hints})),
+    {en:"You told me the WHOLE story, Doyun! I know it now because of you. Bye bye!",
+     ko:"너 방금 이야기를 통째로 다 말한 거야, 도윤! 네 덕분에 나도 알게 됐어. 안녕!",last:true,act:'dance'}
+  ];
+}
+
+/* 🌳 매직트리하우스 — 권수만 고르면 된다. 뼈대는 매 권 똑같으니 권별로 적어 둘 필요가 없다.
+   마지막엔 다음 권 '제목만' 흘린다 — 무슨 일이 일어나는지는 Rex도 모른다. 도윤이가 추측한다. */
+function mthSteps(){
+  const read=Math.max(1,Math.min(28,MTH_BOOK||1));
+  const next=read+1;
+  const title=MTH_TITLES[read]||'';
+  const walk=walkFor('mth');
+  const steps=[
+    {en:`Hi Doyun! I'm Rex. Magic Tree House number ${read} — "${title}"! I never read it. You tell me!`,
+     ko:`안녕 도윤! 나 Rex야. 매직트리하우스 ${read}권 — "${title}"! 난 안 읽어 봤어. 네가 알려 줘!`,intro:true,act:'jump'},
+    {en:"First, one quick thing — was it funny, scary, or exciting?",ko:"먼저 하나만 — 웃겼어, 무서웠어, 신났어?",ask:true,hints:W_FEEL},
+    ...walk.map((q,k)=>({en:q.en, ko:`📖 ${k+1}/${walk.length} · ${q.ko}`, ask:true, qno:k+1, hints:q.hints}))
+  ];
+  if((RANK[STAGE]||3)>=3){
+    const b=pick(MTH_BACK);
+    steps.push({en:`By the way — ${b.en}`,ko:`그러고 보니 — ${b.ko}`,ask:true,hints:b.hints});
+  }
+  if(next<=28 && MTH_TITLES[next]){
+    steps.push({en:`You told me the WHOLE trip, Doyun! Book ${next} is called "${MTH_TITLES[next]}". That's all I know — just the title. Where do you think they go?`,
+      ko:`너 방금 여행을 통째로 다 말한 거야, 도윤! 다음 ${next}권 제목은 "${MTH_TITLES[next]}". 내가 아는 건 제목뿐이야. 이번엔 어디로 갈 것 같아?`,
+      ask:true,act:'happy',hints:["Maybe they go to...","I think it's about...","Probably somewhere with..."]});
+  }
+  steps.push({en:"You remembered so much, Doyun! Go climb that tree house again. Bye bye!",
+    ko:"진짜 많이 기억하고 있구나, 도윤! 얼른 나무 집에 또 올라가 봐. 안녕!",last:true,act:'dance'});
+  return steps;
 }
 
 /* ================= 오프라인 대화 이어가기 ================= */
@@ -771,7 +1010,7 @@ function echoBack(text){
 // 되묻는 말이 연달아 겹치면 금방 시시해진다 — 최근에 쓴 건 피해서 고른다.
 let usedFollows=[];
 function nextFollow(){
-  const fol=STAGES[STAGE].follows;
+  const fol=(STAGES[STAGE]||STAGES.s79).follows;
   const fresh=fol.filter(f=>!usedFollows.includes(f));
   const f=pick(fresh.length?fresh:fol);
   usedFollows.push(f);
@@ -949,7 +1188,25 @@ function drawDress(){
   });
 }
 
-/* ================= 내 책 화면 ================= */
+/* ================= 📖 책 이야기 화면 ================= */
+// 무슨 책인지 고르는 자리. 등록된 책이 없어도 여기서 바로 시작할 수 있다.
+function drawBookPick(){
+  drawStage();
+  const el=$('opKind'); el.innerHTML='';
+  Object.keys(BOOKKINDS).forEach(k=>{
+    const b=document.createElement('button');
+    b.className='opt'+(BOOKKIND===k?' on':'');
+    b.textContent=BOOKKINDS[k].e+' '+BOOKKINDS[k].name;
+    b.onclick=()=>{ BOOKKIND=k; try{localStorage.setItem('rexBookKind',k);}catch(e){} drawBookPick(); };
+    el.appendChild(b);
+  });
+  $('mthRow').classList.toggle('hidden',BOOKKIND!=='mth');
+  $('otherRow').classList.toggle('hidden',BOOKKIND!=='other');
+  $('mthNo').value=MTH_BOOK;
+  $('mthTitle').textContent=MTH_TITLES[MTH_BOOK]?('"'+MTH_TITLES[MTH_BOOK]+'"'):'';
+  $('otherTitle').value=OTHER_TITLE;
+  drawBooks();
+}
 function drawStage(){
   ['opStage','opStageStart'].forEach(host=>{
     const el=$(host); if(!el) return;
@@ -965,7 +1222,7 @@ function drawStage(){
 function drawBooks(){
   const el=$('booklist'); el.innerHTML='';
   if(!BOOKS.length){
-    el.innerHTML='<div class="empty">아직 넣은 책이 없어요.<br>아래 <b>＋ 새 책 넣기</b>로 책 제목과 뒤에 있는 질문을 넣어 주세요.<br>안 넣어도 Rex가 단계에 맞는 질문으로 놀아 줍니다.</div>';
+    el.innerHTML='<div class="empty">넣어 둔 책이 없어요 — 그래도 괜찮아요.<br>위에서 고른 책으로 처음부터 끝까지 이야기가 됩니다.</div>';
     return;
   }
   BOOKS.forEach(bk=>{
@@ -1079,14 +1336,23 @@ function stopAudio(){ if(AU){ AU.pause(); } }
 /* ================= 버튼 ================= */
 document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{
   const m=b.dataset.mode;
-  if(m==='book'){ drawStage(); drawBooks(); showSec('books'); return; }
+  if(m==='book'){ drawBookPick(); showSec('books'); return; }
   startPlay(m,null);
 });
 $('toDress').onclick=()=>{ drawDress(); showSec('dress'); };
-$('toBooks').onclick=()=>{ drawStage(); drawBooks(); showSec('books'); };
 $('dressDone').onclick=()=>showSec('start');
 $('dressReset').onclick=()=>{ LOOK={...DEFAULT_LOOK}; paintLook(); };
 $('booksBack').onclick=()=>showSec('start');
+$('bookGo').onclick=()=>startPlay('book',seriesBook());
+$('mthNo').oninput=()=>{
+  let n=parseInt($('mthNo').value,10); if(!(n>=1&&n<=28)) return;
+  MTH_BOOK=n; try{localStorage.setItem('rexMthBook',String(n));}catch(e){}
+  $('mthTitle').textContent=MTH_TITLES[n]?('"'+MTH_TITLES[n]+'"'):'';
+};
+$('otherTitle').oninput=()=>{
+  OTHER_TITLE=$('otherTitle').value.trim();
+  try{localStorage.setItem('rexOtherTitle',OTHER_TITLE);}catch(e){}
+};
 $('bCancel').onclick=e=>{ e.preventDefault(); $('bTitle').value=''; $('bQs').value=''; delete $('bookform').dataset.edit; $('bookform').open=false; };
 $('bSave').onclick=()=>{
   const title=$('bTitle').value.trim();
