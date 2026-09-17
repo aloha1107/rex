@@ -271,6 +271,12 @@
       </div>
     </div>
 
+    <!-- 대화 중에도 언제든 처음으로. 다음 → 와 멀찍이 떨어뜨려 실수로 안 눌리게 둔다.
+         뭐라도 말했으면 그냥 버리지 않고 칭찬 화면으로 보내 기록까지 남긴다(quitPlay). -->
+    <div class="row" style="margin-top:18px">
+      <button class="sm" id="quit">🏠 그만하고 처음으로</button>
+    </div>
+
     <details class="mom">
       <summary>손으로 적기 (마이크가 안 될 때)</summary>
       <div class="in">
@@ -725,6 +731,112 @@ const PARROT_SETS={
    {r:'a',en:"Definitely. I'm in.",ko:"당연하지. 나 할래.",act:'dance'}]}]
 };
 
+/* ================= 🎬 상황별 회화 =================
+   가게·식당·길 묻기처럼 도윤이 생활에 실제로 있는 자리. 어린이 영어에서 표준으로 다루는
+   상황을 조사해 골랐고(가게·식당·길·아플 때·전화·생일·놀이터·처음 만난 친구),
+   문장은 전부 새로 썼다 — 교재를 베끼지 않는다.
+   규칙 하나: 묻는 말(q)은 **Rex가 상대역으로 도윤이에게 묻는 말**, 대답(a)은 **도윤이가 할 법한 말**.
+   그래야 영어회화에서 q 가 그대로 질문이 되고 a 가 힌트가 된다.
+   한 벌로 두 눈금을 다 쓴다 — easy 가 있으면 '편하게'에서 그 짧은 말을 쓴다. */
+const SITU=[
+ {topic:'가게에서 사기',lines:[
+  {r:'q',en:"Hi, welcome in! What are you looking for today?",easy:"Hi! What do you want to buy?",ko:"어서 오세요! 오늘 뭐 찾으세요?"},
+  {r:'a',en:"I'm looking for a dinosaur book.",easy:"I want a dinosaur book.",ko:"공룡 책 찾고 있어요.",act:'roar'},
+  {r:'q',en:"We've got a few of those. Which one do you want?",easy:"We have three. Which one?",ko:"몇 권 있어요. 어떤 거요?"},
+  {r:'a',en:"I'll take the one with the T-rex on the cover.",easy:"The T-rex one, please.",ko:"티렉스 그려진 걸로 할게요."},
+  {r:'q',en:"Good choice. Do you need anything else?",easy:"Okay! Anything else?",ko:"좋은 선택이에요. 더 필요한 거 있어요?"},
+  {r:'a',en:"No thanks, that's everything.",easy:"No, thank you.",ko:"아니요, 그게 다예요."},
+  {r:'q',en:"That'll be five dollars. Cash or card?",easy:"It's five dollars.",ko:"5달러예요. 현금이요, 카드요?"},
+  {r:'a',en:"Cash, please. Here you go.",easy:"Here you are.",ko:"현금으로요. 여기요."},
+  {r:'q',en:"Here's your change. Do you want a bag?",easy:"Do you want a bag?",ko:"거스름돈이에요. 봉투 드릴까요?"},
+  {r:'a',en:"Yes please. Thank you so much!",easy:"Yes, please. Thank you!",ko:"네 주세요. 정말 고맙습니다!",act:'happy'}]},
+ {topic:'식당에서 주문하기',lines:[
+  {r:'q',en:"Hi there! Are you ready to order?",easy:"Hi! Are you ready to order?",ko:"안녕하세요! 주문하시겠어요?"},
+  {r:'a',en:"Yes, I think so. Could I get the chicken?",easy:"Yes. Can I have the chicken?",ko:"네. 치킨 주세요."},
+  {r:'q',en:"Sure. Would you like something to drink with that?",easy:"Okay. Do you want a drink?",ko:"음료도 드릴까요?"},
+  {r:'a',en:"Just water is fine, thanks.",easy:"Water, please.",ko:"물이면 돼요."},
+  {r:'q',en:"Is there anything you can't eat?",easy:"Is anything too spicy for you?",ko:"못 드시는 거 있어요?"},
+  {r:'a',en:"I can't really handle spicy food.",easy:"Not spicy, please.",ko:"매운 건 잘 못 먹어요."},
+  {r:'q',en:"Here you go. How does it taste?",easy:"Here you go! Is it good?",ko:"여기 있어요. 맛이 어때요?"},
+  {r:'a',en:"It's really good, actually.",easy:"It's really good!",ko:"진짜 맛있어요.",act:'eat'},
+  {r:'q',en:"Glad you like it. Can I bring you anything else?",easy:"Do you want anything else?",ko:"더 필요한 거 있어요?"},
+  {r:'a',en:"No, I'm all done. Thank you!",easy:"No, thank you. I'm done.",ko:"아니요, 다 먹었어요. 고맙습니다!"}]},
+ {topic:'길 묻기',lines:[
+  {r:'q',en:"Excuse me! I think I'm lost. Do you know where the library is?",easy:"Excuse me! Where is the library?",ko:"저기요! 길을 잃은 것 같아요. 도서관이 어디예요?"},
+  {r:'a',en:"Sure, it's just down this street.",easy:"It's down this street.",ko:"네, 이 길로 쭉 가면 있어요."},
+  {r:'q',en:"Do I turn left or right at the corner?",easy:"Left or right?",ko:"모퉁이에서 왼쪽이에요, 오른쪽이에요?"},
+  {r:'a',en:"Turn left at the corner, then keep going straight.",easy:"Turn left, then go straight.",ko:"모퉁이에서 왼쪽으로 돌고 쭉 가세요."},
+  {r:'q',en:"Is it far? Should I walk, or take a bus?",easy:"Is it far?",ko:"멀어요? 걸어갈까요, 버스 탈까요?"},
+  {r:'a',en:"It's not far at all. You can walk.",easy:"It's close. You can walk.",ko:"하나도 안 멀어요. 걸어가도 돼요.",act:'run'},
+  {r:'q',en:"How long does it take, more or less?",easy:"How many minutes?",ko:"대충 얼마나 걸려요?"},
+  {r:'a',en:"Maybe five minutes, something like that.",easy:"About five minutes.",ko:"5분쯤이요."},
+  {r:'q',en:"You've been a big help. Thanks a lot!",easy:"Thank you so much!",ko:"큰 도움이 됐어요. 정말 고마워요!"},
+  {r:'a',en:"No problem. Good luck finding it!",easy:"You're welcome!",ko:"천만에요. 잘 찾으세요!",act:'happy'}]},
+ {topic:'아플 때',lines:[
+  {r:'q',en:"You don't look so good. What's wrong?",easy:"Are you okay? What's wrong?",ko:"안색이 안 좋네. 어디 아파?"},
+  {r:'a',en:"My stomach hurts a little.",easy:"My stomach hurts.",ko:"배가 좀 아파요."},
+  {r:'q',en:"How long has it been hurting?",easy:"When did it start?",ko:"언제부터 아팠어?"},
+  {r:'a',en:"Since this morning, I think.",easy:"This morning.",ko:"오늘 아침부터인 것 같아요."},
+  {r:'q',en:"Do you have a fever too, or just the stomachache?",easy:"Do you feel hot?",ko:"열도 나? 아니면 배만?"},
+  {r:'a',en:"No fever. It's just my stomach.",easy:"No. Just my stomach.",ko:"열은 없고 배만 아파요."},
+  {r:'q',en:"Did you eat anything unusual?",easy:"What did you eat?",ko:"뭐 이상한 거 먹었어?"},
+  {r:'a',en:"I had a lot of ice cream last night.",easy:"I ate a lot of ice cream.",ko:"어젯밤에 아이스크림을 많이 먹었어요.",act:'eat'},
+  {r:'q',en:"Let's get you some rest. Do you want to lie down?",easy:"Do you want to rest?",ko:"좀 쉬자. 누울래?"},
+  {r:'a',en:"Yes please. I just want to lie down.",easy:"Yes, please.",ko:"네. 그냥 눕고 싶어요.",act:'sleep'}]},
+ {topic:'전화 받기',lines:[
+  {r:'q',en:"Hello? Is this Doyun?",easy:"Hello! Is this Doyun?",ko:"여보세요? 도윤이니?"},
+  {r:'a',en:"Yes, this is me. Who's calling?",easy:"Yes, it's me. Who is it?",ko:"네, 저예요. 누구세요?"},
+  {r:'q',en:"It's Rex! Can you talk right now?",easy:"It's Rex! Can you talk now?",ko:"나 Rex야! 지금 통화 돼?"},
+  {r:'a',en:"Yeah, I've got a minute. What's up?",easy:"Yes. What is it?",ko:"응, 잠깐 돼. 무슨 일이야?"},
+  {r:'q',en:"Can you hear me okay? You sound far away.",easy:"Can you hear me?",ko:"내 말 잘 들려? 좀 멀게 들려."},
+  {r:'a',en:"You're a bit quiet. Could you say that again?",easy:"A little. Say it again, please.",ko:"좀 작아. 다시 말해 줄래?"},
+  {r:'q',en:"I said, do you want to come over later?",easy:"Do you want to come over later?",ko:"이따 우리 집에 올래? 라고 했어."},
+  {r:'a',en:"I'd like to, but I have to ask first.",easy:"Maybe. I have to ask first.",ko:"가고 싶은데 먼저 물어봐야 해."},
+  {r:'q',en:"Okay, call me back when you know. Bye!",easy:"Okay! Call me later. Bye!",ko:"알았어, 알게 되면 전화해. 안녕!"},
+  {r:'a',en:"Will do. Talk to you later!",easy:"Okay. Bye bye!",ko:"그럴게. 나중에 얘기하자!",act:'happy'}]},
+ {topic:'생일파티',lines:[
+  {r:'q',en:"Happy birthday! How old are you now?",easy:"Happy birthday! How old are you?",ko:"생일 축하해! 이제 몇 살이야?"},
+  {r:'a',en:"I just turned eight!",easy:"I'm eight now!",ko:"이제 여덟 살이야!",act:'jump'},
+  {r:'q',en:"Who did you invite to the party?",easy:"Who is coming to your party?",ko:"파티에 누구 초대했어?"},
+  {r:'a',en:"A few friends from my class.",easy:"Some friends from school.",ko:"우리 반 친구 몇 명."},
+  {r:'q',en:"What kind of cake did you get?",easy:"What cake do you have?",ko:"무슨 케이크야?"},
+  {r:'a',en:"Chocolate, with a dinosaur on top.",easy:"Chocolate, with a dinosaur!",ko:"초콜릿, 위에 공룡이 올라가 있어.",act:'roar'},
+  {r:'q',en:"Have you opened any presents yet?",easy:"Did you get a present?",ko:"선물은 벌써 열어 봤어?"},
+  {r:'a',en:"Yeah, I got a game I've wanted forever.",easy:"Yes! I got a new game.",ko:"응, 진짜 오래 갖고 싶던 게임 받았어."},
+  {r:'q',en:"So what do you want to do first?",easy:"What do you want to do now?",ko:"그래서 뭐부터 하고 싶어?"},
+  {r:'a',en:"Let's play a game before we eat!",easy:"Let's play a game!",ko:"먹기 전에 게임하자!",act:'dance'}]},
+ {topic:'놀이터에서 끼워 달라기',lines:[
+  {r:'q',en:"Hey! You've been watching us. Do you want to join?",easy:"Hi! Do you want to play with us?",ko:"야! 아까부터 보고 있더라. 같이 할래?"},
+  {r:'a',en:"Can I? I was hoping someone would ask.",easy:"Yes! Can I play too?",ko:"나도 껴도 돼? 물어봐 주길 바랐어."},
+  {r:'q',en:"Of course. Do you know how this one works?",easy:"Do you know this game?",ko:"당연하지. 이거 어떻게 하는지 알아?"},
+  {r:'a',en:"Not really. Could you show me?",easy:"No. Can you show me?",ko:"잘 몰라. 알려 줄래?"},
+  {r:'q',en:"Sure. Which team do you want to be on?",easy:"Which team do you want?",ko:"그래. 어느 팀 할래?"},
+  {r:'a',en:"I'll go wherever you need me.",easy:"Any team is okay.",ko:"필요한 데로 갈게."},
+  {r:'q',en:"Careful, it's your turn! Ready?",easy:"It's your turn! Ready?",ko:"조심해, 네 차례야! 준비됐어?"},
+  {r:'a',en:"Ready. Here I go!",easy:"Yes! Here I go!",ko:"준비됐어. 간다!",act:'run'},
+  {r:'q',en:"That was close! Do you want to go again?",easy:"That was fun! Again?",ko:"아슬아슬했다! 또 할래?"},
+  {r:'a',en:"Definitely, but let me catch my breath.",easy:"Yes! But I need a break.",ko:"당연하지, 근데 숨 좀 돌리고.",act:'dance'}]},
+ {topic:'처음 만난 친구',lines:[
+  {r:'q',en:"Hi! I haven't seen you here before. Are you new?",easy:"Hi! Are you new here?",ko:"안녕! 여기서 못 본 것 같은데. 처음이야?"},
+  {r:'a',en:"Yeah, it's my first time here.",easy:"Yes, it's my first time.",ko:"응, 여기 처음이야."},
+  {r:'q',en:"How do you like it so far?",easy:"Do you like it here?",ko:"여기 어때, 지금까지는?"},
+  {r:'a',en:"It seems nice. Everyone's been friendly.",easy:"I like it. People are nice.",ko:"괜찮은 것 같아. 다들 친절해."},
+  {r:'q',en:"What do you usually do for fun?",easy:"What do you like to do?",ko:"보통 뭐 하고 놀아?"},
+  {r:'a',en:"I'm into dinosaurs and video games, mostly.",easy:"I like dinosaurs and games.",ko:"주로 공룡이랑 게임.",act:'roar'},
+  {r:'q',en:"No way, me too. What's your favorite game?",easy:"Me too! What game do you like?",ko:"진짜? 나도. 무슨 게임 제일 좋아해?"},
+  {r:'a',en:"It's hard to pick just one, honestly.",easy:"I like a lot of games!",ko:"솔직히 하나만 고르기 어려워."},
+  {r:'q',en:"We should hang out sometime. What do you think?",easy:"Let's play together sometime!",ko:"언제 같이 놀자. 어때?"},
+  {r:'a',en:"I'd like that. See you around!",easy:"Okay! See you!",ko:"좋지. 또 보자!",act:'happy'}]}
+];
+// 눈금에 맞는 문장만 골라 한 벌로 내준다
+function situFor(stage){
+  const easy = stage!=='s79';
+  return SITU.map(s=>({topic:s.topic,
+    lines:s.lines.map(L=>({r:L.r, en:(easy&&L.easy)?L.easy:L.en, ko:L.ko, act:L.act}))}));
+}
+// 🦜 따라 말하기·🗣 영어회화가 함께 쓰는 주머니 — 일상 주제 + 상황별
+function talkPool(){ return (PARROT_SETS[STAGE]||PARROT_SETS.s46).concat(situFor(STAGE)); }
+
 /* ================= Rex가 말하는 수준 (난이도 눈금) =================
    이건 '무슨 책을 읽는지'와 상관없는 눈금이다 — Rex의 말이 얼마나 길고 어려운가만 정한다.
    그래서 이름에 특정 시리즈를 붙이지 않는다(붙여 놓으니 '그 책을 넣어야 하나'로 읽혔다).
@@ -875,7 +987,12 @@ const TOPIC_EN={
  '오늘 하루 이야기':'your day','좋아하는 것 말하기':'things you like','친구와 이야기하기':'talking with friends',
  '모를 때 물어보기':'asking when you are stuck','생각 말하기':'saying what you think',
  '주말 이야기':'your weekend','약속 잡기':'making plans','설명하고 되묻기':'explaining and asking back',
- '의견 나누기':'sharing your opinion','읽은 책 이야기':'a book you read'
+ '의견 나누기':'sharing your opinion','읽은 책 이야기':'a book you read',
+ // 🎬 상황별 — 여기 빠지면 인사말이 'stuff' 로 떨어진다. 주제를 더할 때 이 표도 같이 채운다.
+ '가게에서 사기':'buying something at a store','식당에서 주문하기':'ordering food',
+ '길 묻기':'helping someone find a place','아플 때':'when you feel sick',
+ '전화 받기':'talking on the phone','생일파티':'a birthday party',
+ '놀이터에서 끼워 달라기':'joining a game','처음 만난 친구':'meeting someone new'
 };
 /* 💡 대답 힌트 — 도윤이는 아직 말하기가 서투르다. 뭘 말하면 좋을지 발판을 준다.
    누르면 읽어 주고, 그대로 말해도 되고 바꿔 말해도 된다. */
@@ -905,23 +1022,39 @@ function hintsFor(ans){ return [starterOf(ans), "I think...", "I don't know, but
 
 let lastTopic='';
 function stepsFor(mode,book){
-  /* 🗣 영어회화 — 도윤이가 직접 말한다. 정해진 답이 없고, 힌트가 늘 붙는다. */
+  /* 🗣 영어회화 — 도윤이가 직접 말한다. 정해진 답이 없고, 힌트가 늘 붙는다.
+     한 주제(3~5문항)로는 10분을 못 버틴다 → 질문이 TALK_WANT 개가 될 때까지 주제를 이어 붙인다.
+     새 주제로 넘어갈 때는 걸음을 따로 두지 않고 첫 질문 앞에 한마디를 붙인다(흐름이 끊기지 않게). */
+  const TALK_WANT=10;
   if(mode==='talk'){
-    const sets=PARROT_SETS[STAGE]||PARROT_SETS.s46;
-    const pool=sets.filter(s=>s.topic!==lastTopic);
-    const set=pick(pool.length?pool:sets); lastTopic=set.topic;
-    const qs=set.lines.filter(L=>L.r==='q'), as=set.lines.filter(L=>L.r==='a');
+    const sets=talkPool();
+    const first=pick(sets.filter(s=>s.topic!==lastTopic).length?sets.filter(s=>s.topic!==lastTopic):sets);
+    lastTopic=first.topic;
     usedFollows=[];
+    const qa=(set,lead)=>{
+      const qs=set.lines.filter(L=>L.r==='q'), as=set.lines.filter(L=>L.r==='a');
+      return qs.map((q,k)=>({
+        en:(k===0&&lead)?lead+' '+q.en:q.en,
+        ko:(k===0&&lead)?`(새 주제: ${set.topic}) ${q.ko}`:q.ko,
+        ask:true, hints:hintsFor((as[k]||{}).en||'')}));
+    };
+    const LEADS=["Okay, new thing!","Let's switch!","Ooh, I thought of something else.","Changing it up!"];
+    let asks=qa(first);
+    const rest=sets.filter(s=>s.topic!==first.topic);
+    while(asks.length<TALK_WANT && rest.length){
+      const nxt=rest.splice(Math.floor(Math.random()*rest.length),1)[0];
+      asks=asks.concat(qa(nxt,pick(LEADS)));
+    }
     return [
-      {en:`Hi Doyun! I'm Rex. Let's just talk about ${TOPIC_EN[set.topic]||'stuff'}. Say anything you want — I'll help!`,
-       ko:`안녕 도윤! 오늘은 "${set.topic}"로 그냥 이야기하자. 하고 싶은 말 아무거나 해도 돼 — 힌트 줄게!`,intro:true,act:'happy'},
-      ...qs.map((q,k)=>({en:q.en, ko:q.ko, ask:true, hints:hintsFor((as[k]||{}).en||'')})),
+      {en:`Hi Doyun! I'm Rex. Let's just talk — we'll start with ${TOPIC_EN[first.topic]||'stuff'}. Say anything you want, I'll help!`,
+       ko:`안녕 도윤! 오늘은 그냥 이야기하자 — "${first.topic}"부터. 하고 싶은 말 아무거나 해도 돼, 힌트 줄게!`,intro:true,act:'happy'},
+      ...asks,
       {en:"You talked so much today, Doyun! That was awesome. Bye bye!",
        ko:"오늘 진짜 많이 말했다, 도윤! 최고였어. 안녕!",last:true,act:'dance'}
     ];
   }
   if(mode==='parrot'){
-    const sets=PARROT_SETS[STAGE]||PARROT_SETS.s46;
+    const sets=talkPool();
     const pool=sets.filter(s=>s.topic!==lastTopic);
     const set=pick(pool.length?pool:sets); lastTopic=set.topic;
     return [
@@ -1040,6 +1173,33 @@ const MODE_NAME={parrot:'🦜 따라 말하기',talk:'🗣 영어회화',book:'�
 
 function showSec(id){['start','dress','books','play','end','listen'].forEach(s=>$(s).classList.toggle('hidden',s!==id));
   if(id!=='listen') stopAudio();}
+
+/* ================= 판 번호 — 중간에 나가도 앞 판이 따라오지 않게 =================
+   말하기·듣기·서버 응답은 전부 기다렸다가(await) 화면을 건드린다.
+   중간에 나가면 그 기다림이 뒤늦게 깨어나 새 판에 끼어들 수 있다(반쯤 진행된 대화가 섞임).
+   그래서 판마다 번호를 매기고, 기다림에서 깨어났을 때 번호가 달라졌으면 조용히 물러난다. */
+let SESSION=0;
+function stopInput(){
+  try{ if(rec){ rec.onend=null; rec.abort?rec.abort():rec.stop(); } }catch(e){}
+  rec=null; listening=false;
+  try{ Rex.listen(false); }catch(e){}
+  try{ speechSynthesis.cancel(); }catch(e){}
+  try{ busy(false); }catch(e){}
+  $('mic').classList.remove('on');
+}
+// 판을 접고 상태를 깨끗이 비운다 (lastTopic 은 남긴다 — 같은 주제가 연달아 나오지 않게)
+function leavePlay(){
+  SESSION++; stopInput();
+  STEPS=[]; i=0; turn=0; chat=[]; log=[]; spoke=0; lastLine=''; usedFollows=[];
+  $('stars').textContent=''; $('modetag').textContent='도윤이의 공룡 영어 친구';
+  $('me').classList.add('hidden'); $('choices').innerHTML='';
+  $('chiphint').classList.add('hidden'); $('copy').textContent='📋 나도에게 줄 기록 복사';
+}
+// 🏠 그만하기 — 한 마디라도 했으면 버리지 않고 칭찬 화면(기록 저장)으로 보낸다.
+function quitPlay(){
+  if(spoke>0){ finish(); return; }
+  leavePlay(); showSec('start');
+}
 function stars(){ $('stars').textContent='⭐'.repeat(Math.min(spoke,10)); }
 function busy(on){ $('thinking').classList.toggle('hidden',!on); $('mic').disabled=on; $('send').disabled=on; }
 
@@ -1050,7 +1210,8 @@ async function rexSays(line,act){
 }
 
 async function renderStep(){
-  const s=STEPS[i]; turn=0;
+  const my=SESSION;
+  const s=STEPS[i]; if(!s) return; turn=0;
   $('me').classList.add('hidden'); $('ko').classList.add('hidden'); $('showko').textContent='뜻 보기';
   $('ko').textContent=s.ko||'';
   const c=$('choices'); c.innerHTML='';
@@ -1068,14 +1229,15 @@ async function renderStep(){
   $('mic').style.visibility = needVoice ? 'visible':'hidden';
   $('micko').style.visibility = needVoice ? 'visible':'hidden';
   $('next').textContent = s.last ? '끝내기 🎉' : (s.ask ? '다음 질문 →' : '다음 →');
-  if(s.parrot){ await rexSays(s.lead+' '+s.en, s.act); lastLine=s.en; }
-  else await rexSays(s.en, s.act);
+  if(s.parrot){ await rexSays(s.lead+' '+s.en, s.act); if(my!==SESSION) return; lastLine=s.en; }
+  else { await rexSays(s.en, s.act); if(my!==SESSION) return; }
   if(s.ask && LIVE) chat.push({role:'assistant',content:s.en});
-  if(s.last) setTimeout(finish,1800);
+  if(s.last) setTimeout(()=>{ if(my===SESSION) finish(); },1800);
 }
 
 async function answer(text){
-  const s=STEPS[i]; const isKo=/[가-힣]/.test(text);
+  const my=SESSION;
+  const s=STEPS[i]; if(!s) return; const isKo=/[가-힣]/.test(text);
   $('said').textContent=text; $('said').classList.toggle('ko',isKo); $('me').classList.remove('hidden');
   log.push({who:'도윤',text,ko:isKo}); spoke++; stars();
 
@@ -1091,6 +1253,7 @@ async function answer(text){
       busy(true);
       try{
         let res=await liveReply(chat);
+        if(my!==SESSION) return;              // 기다리는 사이에 나갔으면 물러난다
         let out=res.text||'';
         chat.push({role:'assistant',content:out});
         let act=null;
@@ -1101,6 +1264,7 @@ async function answer(text){
         showHints(res.hints&&res.hints.length?res.hints:s.hints);
       }catch(e){
         busy(false);
+        if(my!==SESSION) return;
         LIVE=false; $('livetag').classList.add('hidden');
         Rex.act('happy');
         await rexSays(offlineReply(text,turn));
@@ -1139,7 +1303,7 @@ function listen(lang){
 
 /* ================= 마무리 ================= */
 function finish(){
-  speechSynthesis.cancel();
+  stopInput();
   const mins=Math.max(1,Math.round((Date.now()-t0)/60000));
   $('praise').innerHTML = spoke>0
     ? `오늘 도윤이가 Rex한테 <b>${spoke}번</b> 말했어! 🦖<br>소리 낸 거 하나하나가 다 멋졌어.`
@@ -1148,6 +1312,7 @@ function finish(){
   const record={date:new Date().toISOString().slice(0,10),mins,mode:MODE_NAME[mode],book:state.bookTitle,live:LIVE,spoke,log};
   try{ const all=JSON.parse(localStorage.getItem('rexLogs')||'[]'); all.push(record); localStorage.setItem('rexLogs',JSON.stringify(all)); }catch(e){}
   window._record=record;
+  SESSION++;                      // 끝난 판이 뒤늦게 화면을 건드리지 못하게
   showSec('end'); setTimeout(()=>Rex.act('dance'),300);
 }
 function recordText(r){
@@ -1242,6 +1407,7 @@ function drawBooks(){
 
 /* ================= 시작 ================= */
 async function startPlay(m,book){
+  leavePlay();                       // 앞 판을 확실히 접고 시작한다
   mode=m;
   await loadVoice();
   showVoice();
@@ -1253,6 +1419,7 @@ async function startPlay(m,book){
 
 
 /* ================= 🎧 음원 듣기 =================
+   ⚠️ 여기에 드라이브 경로를 다시 적지 말 것 — 공개본에 그대로 실린다.
    공개 사이트에서는 서버가 없으니 버튼 자체가 안 보인다. */
 let AUDIO_OK=false, audioPath='', audioStack=[], AU=null, curTrack='';
 async function checkAudio(){
@@ -1369,11 +1536,12 @@ $('slow').onclick=()=>say(lastLine,0.65);
 $('showko').onclick=()=>{const h=$('ko').classList.toggle('hidden'); $('showko').textContent=h?'뜻 보기':'뜻 숨기기';};
 $('mic').onclick=()=>listen('en-US');
 $('micko').onclick=()=>listen('ko-KR');
-$('next').onclick=()=>{ if(rec&&listening) rec.stop(); if(STEPS[i].last){finish();return;} i=Math.min(i+1,STEPS.length-1); renderStep(); };
+$('next').onclick=()=>{ if(!STEPS[i]) return; if(rec&&listening) rec.stop(); if(STEPS[i].last){finish();return;} i=Math.min(i+1,STEPS.length-1); renderStep(); };
 $('send').onclick=()=>{const v=$('typed').value.trim(); if(v){$('typed').value=''; answer(v);}};
 $('typed').onkeydown=e=>{ if(e.key==='Enter') $('send').click(); };
 $('copy').onclick=async()=>{ try{ await navigator.clipboard.writeText(recordText(window._record)); $('copy').textContent='✅ 복사했어요 — 나도 창에 붙여 주세요'; }catch(e){ $('copy').textContent='복사 실패 — 화면 기록을 보여 주세요'; } };
-$('home').onclick=()=>{ $('copy').textContent='📋 나도에게 줄 기록 복사'; $('stars').textContent=''; $('modetag').textContent='도윤이의 공룡 영어 친구'; showSec('start'); };
+$('home').onclick=()=>{ leavePlay(); showSec('start'); };
+$('quit').onclick=quitPlay;
 
 /* 첫 화면 준비 */
 drawStage();
